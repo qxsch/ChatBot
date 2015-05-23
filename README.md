@@ -1,2 +1,5 @@
 # ChatBot
-A ChatBot for C#
+
+Extremely unstable POC ;-)
+
+Checkout the Example
