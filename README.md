@@ -4,6 +4,8 @@ Extremely unstable POC ;-)
 
 Checkout the Example
 
+![Image of Yaktocat](https://raw.githubusercontent.com/qxsch/ChatBot/master/ChatBot.jpg)
+
 
 ```cs
 using System;
