@@ -2,7 +2,7 @@
 
 Extremely unstable POC ;-)
 
-Checkout the Example
+Checkout the example
 
 ![Image of Yaktocat](https://raw.githubusercontent.com/qxsch/ChatBot/master/ChatBot.jpg)
 
