@@ -12,12 +12,51 @@ namespace QXS.ChatBot.Examples
     {
         static void Main(string[] args)
         {
+            /*string xml = @"<ChatBot>
+	                        <Rules>
+		                        <Rule Type=""BotRule"" Name="""">
+			                        <Pattern><![CDATA[]]></Pattern>
+			                        <Weight></Weight>
+			                        <Process><![CDATA[
+			                        ]]></Process>
+		                        </Rule>
+		
+		                        <Rule Type=""RandomAnswersBotRule"" Name="""">
+			                        <Pattern><![CDATA[]]></Pattern>
+			                        <Weight></Weight>
+			                        <Messages>
+				                        <Message></Message>
+			                        </Messages>
+		                        </Rule>
+		
+		                        <Rule Type=""ReplacementBotRule"" Name="""">
+			                        <Pattern><![CDATA[]]></Pattern>
+			                        <Weight></Weight>
+			                        <Messages>
+				                        <Message></Message>
+			                        </Messages>
+			                        <Setters>
+				                        <Set key=""KEY"">Value</Set>
+			                        </Setters>
+		                        </Rule>
+		
+		                        <Rule Type=""ConditionalBotRule"" Name="""">
+			                        <Weight></Weight>
+			                        <Conditions>
+				                        <Condition Key=""KEY"" Operator=""Equal"">VALUE</Condition>
+			                        </Conditions>
+			                        <Rules>
+				                        <!-- ... -->
+			                        </Rules>
+		                        </Rule>
+	                        </Rules>
+                        </ChatBot>";*/
+
 
             ChatBot cb = new ChatBot(
                 new List<BotRule>()
                 {
-                    new ReplacementBotRule("repeat", 40, new Regex("(please )?repeat(?<sentence> .*)", RegexOptions.IgnoreCase), new string[] { "i repeat your sentence:$r$sentence$", "$s$BotName$ repeats your sentence:$r$sentence$"}),
-                    new RandomAnswersBotRule("getfeeling", 40, new Regex("how do you feel", RegexOptions.IgnoreCase), new string[] {"i feel great", "i feel tired", "i feel awful", "i feel happy"}),
+                    // debug rule
                     new BotRule(
                         Name: "var_dump",
                         Weight: 200, 
@@ -38,6 +77,27 @@ namespace QXS.ChatBot.Examples
                             return answer;
                         }
                     ),
+
+                    // chatbot specific behaviour
+                    new ConditionBotRule(
+                        "conditionBot", 
+                        50, 
+                        new Tuple<string, ConditionBotRule.Operator, string>[] { 
+                            new Tuple<string, ConditionBotRule.Operator, string>("BotName", ConditionBotRule.Operator.EqualIgnoreCase, "chatbot") 
+                        }, 
+                        new BotRule[] {
+                            // chatbot just knows positive feelings...
+                            new RandomAnswersBotRule("getfeeling2", 40, new Regex("how do you feel", RegexOptions.IgnoreCase), new string[] {"i feel super", "i feel perfect", "i feel happy"}),
+                        }
+                    ),
+                    // repet the last known sentence
+                    new ReplacementBotRule("repeatLast", 41, new Regex("(please )?repeat the last sentence", RegexOptions.IgnoreCase), new string[] { "i repeat your last sentence:$s$sentence$", "$s$BotName$ repeats your last sentence:$s$sentence$"}),
+                    // repet a sentence
+                    new ReplacementBotRule("repeat", 40, new Regex("(please )?repeat(?<sentence> .*)", RegexOptions.IgnoreCase), new string[] { "i repeat your sentence:$r$sentence$", "$s$BotName$ repeats your sentence:$r$sentence$"}, new Dictionary<string,string>() { {"sentence", "$r$sentence$"} }),
+                    // reports your feelings
+                    new RandomAnswersBotRule("getfeeling", 40, new Regex("how do you feel", RegexOptions.IgnoreCase), new string[] {"i feel great", "i feel tired", "i feel bored"}),
+
+                    // set the name of the bot
                     new BotRule(
                         Name: "setbotname",
                         Weight: 10, 
@@ -47,6 +107,7 @@ namespace QXS.ChatBot.Examples
                             return "My name is now " + session.SessionStorage.Values["BotName"];
                         }
                     ),
+                    // show the bot's name
                     new BotRule(
                         Name: "getbotname",
                         Weight: 10, 
@@ -63,6 +124,8 @@ namespace QXS.ChatBot.Examples
                             return "My name is " + session.SessionStorage.Values["BotName"];
                         }
                     ),
+
+                    // set the name of the user
                     new BotRule(
                         Name: "setusername",
                         Weight: 10, 
@@ -72,6 +135,7 @@ namespace QXS.ChatBot.Examples
                             return "Hi " + session.SessionStorage.Values["UserName"];
                         }
                     ),
+                    // show the user's name
                     new BotRule(
                         Name: "getusername",
                         Weight: 20, 
@@ -84,6 +148,8 @@ namespace QXS.ChatBot.Examples
                             return "Your name is " + session.SessionStorage.Values["UserName"];
                         }
                     ),
+
+                    // greet
                     new BotRule(
                         Name: "greet",
                         Weight: 1, 

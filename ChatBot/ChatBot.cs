@@ -8,23 +8,23 @@ using System.Threading.Tasks;
 
 namespace QXS.ChatBot
 {
+    internal class DescComparer<T> : IComparer<T>
+    {
+        public int Compare(T x, T y)
+        {
+            return Comparer<T>.Default.Compare(y, x);
+        }
+    }
+
     public class ChatBot
     {
-        class DescComparer<T> : IComparer<T>
-        {
-            public int Compare(T x, T y)
-            {
-                return Comparer<T>.Default.Compare(y, x);
-            }
-        }
-
         public Func<string, bool> ExitCondition;
 
         protected Stack<string> _commandHistory = new Stack<string>();
         protected SortedList<int, List<BotRule>> _botRules = new SortedList<int, List<BotRule>>(new DescComparer<int>());
         public ChatBot(List<BotRule> Rules)
         {
-            Dictionary<string, bool> ruleNames = new Dictionary<string, bool>();
+           Dictionary<string, bool> ruleNames = new Dictionary<string, bool>();
            foreach(BotRule rule in Rules)
            {
                if (rule.Process == null)
@@ -60,7 +60,6 @@ namespace QXS.ChatBot
                     Match match = rule.MessagePattern.Match(messageIn);
                     if (match.Success)
                     {
-                        
                         string msg = rule.Process(match, session);
                         if (msg != null)
                         {
