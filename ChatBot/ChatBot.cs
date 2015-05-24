@@ -22,7 +22,7 @@ namespace QXS.ChatBot
 
         protected Stack<string> _commandHistory = new Stack<string>();
         protected SortedList<int, List<BotRule>> _botRules = new SortedList<int, List<BotRule>>(new DescComparer<int>());
-        public ChatBot(List<BotRule> Rules)
+        public ChatBot(IEnumerable<BotRule> Rules)
         {
            Dictionary<string, bool> ruleNames = new Dictionary<string, bool>();
            foreach(BotRule rule in Rules)

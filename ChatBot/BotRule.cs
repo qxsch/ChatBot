@@ -19,7 +19,7 @@ namespace QXS.ChatBot
         protected Tuple<string, Operator, string>[] _Conditions;
         protected SortedList<int, List<BotRule>> _BotRules = new SortedList<int, List<BotRule>>(new DescComparer<int>());
 
-        public ConditionBotRule(string Name, int Weight, Tuple<string, Operator, string>[] Conditions, BotRule[] Rules)
+        public ConditionBotRule(string Name, int Weight, Tuple<string, Operator, string>[] Conditions, IEnumerable<BotRule> Rules)
             : base(Name, Weight)
         {
             this._MessagePattern = new Regex("^.*$");
