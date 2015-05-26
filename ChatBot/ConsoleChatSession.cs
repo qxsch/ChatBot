@@ -21,13 +21,16 @@ namespace QXS.ChatBot
         }
         public void sendMessage(string message)
         {
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("BOT> ");
             Console.WriteLine(message.Replace("\n", "\n     "));
+            Console.ResetColor();
         }
 
         public string askQuestion(string message)
         {
             sendMessage(message);
+            Console.Write("YOU> ");
             return readMessage();
         }
 

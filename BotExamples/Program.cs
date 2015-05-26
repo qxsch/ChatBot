@@ -90,7 +90,7 @@ namespace QXS.ChatBot.Examples
                         }, 
                         new BotRule[] {
                             // chatbot just knows positive feelings...
-                            new RandomAnswersBotRule("getfeeling2", 40, new Regex("how do you feel", RegexOptions.IgnoreCase), new string[] {"i feel super", "i feel perfect", "i feel happy"}),
+                            new RandomAnswersBotRule("getfeeling2", 40, new Regex("how (are you|do you feel)", RegexOptions.IgnoreCase), new string[] {"i feel super", "i feel perfect", "i feel happy"}),
                         }
                     ),
                     // repet the last known sentence
@@ -98,7 +98,7 @@ namespace QXS.ChatBot.Examples
                     // repet a sentence
                     new ReplacementBotRule("repeat", 40, new Regex("(please )?repeat(?<sentence> .*)", RegexOptions.IgnoreCase), new string[] { "i repeat your sentence:$r$sentence$", "$s$BotName$ repeats your sentence:$r$sentence$"}, new Dictionary<string,string>() { {"sentence", "$r$sentence$"} }),
                     // reports your feelings
-                    new RandomAnswersBotRule("getfeeling", 40, new Regex("how do you feel", RegexOptions.IgnoreCase), new string[] {"i feel great", "i feel tired", "i feel bored"}),
+                    new RandomAnswersBotRule("getfeeling", 40, new Regex("how (are you|do you feel)", RegexOptions.IgnoreCase), new string[] {"i feel great", "i feel tired", "i feel bored"}),
 
                     // set the name of the bot
                     new BotRule(
