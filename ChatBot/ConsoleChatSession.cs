@@ -36,20 +36,20 @@ namespace QXS.ChatBot
         public SessionStorage SessionStorage { get; set; }
 
 
-        public void SetRuleHistorySize(int size)
+        public void SetResponseHistorySize(int Size)
         {
-            _RuleHistory = new LinkedList<string>(_RuleHistory, size, false);
+            _ResponseHistory = new LinkedList<BotResponse>(_ResponseHistory, Size, false);
+        }
+        protected LinkedList<BotResponse> _ResponseHistory = new LinkedList<BotResponse>(10, false);
+        public void AddResponseToHistory(BotResponse Response)
+        {
+            _ResponseHistory.Push(Response);
         }
 
-        protected LinkedList<string> _RuleHistory = new LinkedList<string>(10, false);
-        public void AddRuleToHistory(string rule)
+        public Stack<BotResponse> GetResponseHistory()
         {
-            _RuleHistory.Push(rule);
+            return new Stack<BotResponse>(_ResponseHistory.GetAsReverseArray());
         }
 
-        public Stack<string> GetRuleHistory()
-        {
-            return new Stack<string>(_RuleHistory.GetAsReverseArray());
-        }
     }
 }

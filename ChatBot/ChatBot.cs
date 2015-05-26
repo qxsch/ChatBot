@@ -63,7 +63,7 @@ namespace QXS.ChatBot
                         string msg = rule.Process(match, session);
                         if (msg != null)
                         {
-                            session.AddRuleToHistory(rule.Name);
+                            session.AddResponseToHistory(new BotResponse(rule.Name, messageIn, msg));
                             return msg;
                         }
                     }

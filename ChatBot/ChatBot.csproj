@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BotResponse.cs" />
     <Compile Include="BotRule.cs" />
     <Compile Include="ChatBot.cs" />
     <Compile Include="ConsoleChatSession.cs" />

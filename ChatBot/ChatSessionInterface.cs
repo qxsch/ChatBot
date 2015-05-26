@@ -19,8 +19,8 @@ namespace QXS.ChatBot
         SessionStorage SessionStorage { get; set; }
 
 
-        void SetRuleHistorySize(int size);
-        void AddRuleToHistory(string rule);
-        Stack<string> GetRuleHistory();
+        void SetResponseHistorySize(int Size);
+        void AddResponseToHistory(BotResponse Response);
+        Stack<BotResponse> GetResponseHistory();
     }
 }

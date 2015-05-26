@@ -71,9 +71,11 @@ namespace QXS.ChatBot.Examples
                             answer += "---\n";
                             answer += "History: \n";
                             int i=0;
-                            foreach (string ruleName in session.GetRuleHistory())
+                            foreach (BotResponse response in session.GetResponseHistory())
                             {
-                                answer += "  " + (++i) + ". " + ruleName + "\n";
+                                answer += "  " + (++i) + ". " + response.RuleName + "\n";
+                                answer += "      " + response.Question.Replace("\n", "\n      ") + "\n";
+                                answer += "          " + response.Answer.Split('\n')[0] + "\n";
                             }
                             return answer;
                         }
