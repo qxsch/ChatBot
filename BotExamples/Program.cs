@@ -56,6 +56,7 @@ namespace QXS.ChatBot.Examples
             ChatBot cb = new ChatBot(
                 new List<BotRule>()
                 {
+                    new PowershellBotRule("pstest", 10, new Regex("powershell"), @" ( ""Hi from PowerShell "" + $PSVersionTable.PSVersion) "),
                     // debug rule
                     new BotRule(
                         Name: "var_dump",

@@ -25,11 +25,21 @@ namespace QXS.ChatBot
         public LinkedListEnumerator(LinkedList<T> list)
         {
             this.list = list;
-            this.now = list.firstValue;
+            this.now = null;
         }
 
         public bool MoveNext()
         {
+            if (this.now == null)
+            {
+                this.now = list.firstValue;
+                if (this.now == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+
             if (this.now.next == null)
             {
                 return false;
@@ -40,7 +50,7 @@ namespace QXS.ChatBot
 
         public void Reset()
         {
-            this.now = list.firstValue;
+            this.now = null;
         }
 
         void IDisposable.Dispose()
@@ -72,6 +82,15 @@ namespace QXS.ChatBot
         private bool _throwWhenFull;
         private int _elements;
 
+
+        public LinkedList(IEnumerable<T> data, int size=0, bool throwWhenFull=true)
+            : this(size, throwWhenFull)
+        {
+            foreach (T elem in data)
+            {
+                Add(elem);
+            }
+        }
         public LinkedList(int size=0, bool throwWhenFull=true)
         {
             this.Size = size;
@@ -141,7 +160,31 @@ namespace QXS.ChatBot
         }
         public void Add(T item)
         {
-            Push(item);
+            lastValue = new LinkedValue<T>() { current = item, previous = lastValue };
+            _elements++;
+            if (firstValue == null)
+            {
+                firstValue = lastValue;
+            }
+            if (lastValue.previous != null)
+            {
+                lastValue.previous.next = lastValue;
+            }
+
+            if (_elements > Size && Size > 0)
+            {
+                if (_throwWhenFull)
+                {
+                    throw new Exception("The linked list haas reached the limit of " + Size + " items.");
+                }
+                _elements = Size;
+                LinkedValue<T> value = firstValue;
+                firstValue = value.next;
+                firstValue.previous = null;
+                value.next = null;
+                value.previous = null;
+            }
+
         }
 
         public void Push(T item) {
@@ -167,6 +210,7 @@ namespace QXS.ChatBot
                 lastValue = value.previous;
                 lastValue.next = null;
                 value.previous = null;
+                value.next = null;
             }
         }
 
