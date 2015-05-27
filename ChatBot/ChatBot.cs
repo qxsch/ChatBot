@@ -75,6 +75,11 @@ namespace QXS.ChatBot
 
         public void talkWith(ChatSessionInterface session)
         {
+            if (session == null)
+            {
+                return;
+            }
+
             string messageIn="";
             string messageOut="";
             for (messageIn = session.readMessage(); !this.ExitCondition(messageIn); messageIn = session.readMessage())
