@@ -154,7 +154,7 @@ namespace QXS.ChatBot.Examples
                 // greet
                 new BotRule(
                     Name: "greet",
-                    Weight: 1, 
+                    Weight: 2, 
                     MessagePattern: new Regex("(hi|hello)", RegexOptions.IgnoreCase),
                     Process: delegate(Match match, ChatSessionInterface session) {
                         string answer = "Hi";
@@ -171,20 +171,43 @@ namespace QXS.ChatBot.Examples
                         return answer;
                     }
 
+                ),
+                // greet
+                new BotRule(
+                    Name: "default",
+                    Weight: 1, 
+                    MessagePattern: new Regex(".*", RegexOptions.IgnoreCase),
+                    Process: delegate(Match match, ChatSessionInterface session) {
+                        string answer = "well, i have to think about that";
+
+                        if (session.SessionStorage.Values.ContainsKey("UserName"))
+                        {
+                            answer += ", " + session.SessionStorage.Values["UserName"];
+                        }
+  
+                        return answer;
+                    }
+
                 )
             };
 
 
-            LyncExample.LyncChat(rules);
-            /*Console.WriteLine("Press C for console demo or L for lync demo");
+            #if WITHLYNC
+            Console.WriteLine("Press C for console demo or L for lync demo");
             if (Console.ReadKey().Key == ConsoleKey.C)
             {
+                Console.WriteLine(Environment.NewLine + "Console Chat");
                 (new ChatBot(rules)).talkWith(new ConsoleChatSession());;
             }
             else
             {
+                Console.WriteLine(Environment.NewLine + "Lync Chat");
                 LyncExample.LyncChat(rules);
-            }*/
+            }
+            #else
+                Console.WriteLine(Environment.NewLine + "Console Chat");
+                (new ChatBot(rules)).talkWith(new ConsoleChatSession()); ;
+            #endif
         }
     }
 }

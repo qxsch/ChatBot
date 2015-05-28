@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if WITHLYNC
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,6 @@ using Microsoft.Lync.Model.Conversation;
 
 namespace QXS.ChatBot.Examples
 {
-
 
     public class LyncExample
     {
@@ -118,4 +118,6 @@ namespace QXS.ChatBot.Examples
 
 
     }
+
 }
+#endif
