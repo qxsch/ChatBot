@@ -192,22 +192,26 @@ namespace QXS.ChatBot.Examples
             };
 
 
-            #if WITHLYNC
-            Console.WriteLine("Press C for console demo or L for lync demo");
-            if (Console.ReadKey().Key == ConsoleKey.C)
+            Console.WriteLine("Press C for console demo,  S for speech demo   or   L for lync demo");
+            switch (Console.ReadKey().Key)
             {
-                Console.WriteLine(Environment.NewLine + "Console Chat");
-                (new ChatBot(rules)).talkWith(new ConsoleChatSession());;
+                case ConsoleKey.C:
+                    Console.WriteLine(Environment.NewLine + "Console Chat - Please use your keyboard and write something");
+                    (new ChatBot(rules)).talkWith(new ConsoleChatSession());;
+                    break;
+                case ConsoleKey.L:
+                    #if WITHLYNC
+                        Console.WriteLine(Environment.NewLine + "Lync Chat - Please use Lync and write a chat message to the client, where this application is running");
+                        LyncExample.LyncChat(rules);
+                    #else
+                        Console.WriteLine(Environment.NewLine + "This version does not support Lync");
+                    #endif
+                    break;
+                case ConsoleKey.S:
+                    Console.WriteLine(Environment.NewLine + "Speek Chat - Please use your mic and say something");
+                    SpeechExample.SpeechChat(rules);
+                    break;
             }
-            else
-            {
-                Console.WriteLine(Environment.NewLine + "Lync Chat");
-                LyncExample.LyncChat(rules);
-            }
-            #else
-                Console.WriteLine(Environment.NewLine + "Console Chat");
-                (new ChatBot(rules)).talkWith(new ConsoleChatSession()); ;
-            #endif
         }
     }
 }
