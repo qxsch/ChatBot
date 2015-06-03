@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Management.Automation;
 using System.Collections.ObjectModel;
+using System.Xml;
 
 namespace QXS.ChatBot
 {
@@ -38,6 +39,16 @@ namespace QXS.ChatBot
             }
 
             return output.Trim();
+        }
+
+        new public static BotRule CreateRuleFromXml(ChatBotRuleGenerator generator, XmlNode node)
+        {
+            return new PowershellBotRule(
+                generator.GetRuleName(node),
+                generator.GetRuleWeight(node),
+                new Regex(generator.GetRulePattern(node)),
+                node.SelectNodes("Script").Cast<XmlNode>().First().InnerText
+            );
         }
     }
 }

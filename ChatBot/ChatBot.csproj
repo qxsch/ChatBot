@@ -79,6 +79,7 @@
     <Compile Include="BotResponse.cs" />
     <Compile Include="BotRule.cs" />
     <Compile Include="ChatBot.cs" />
+    <Compile Include="ChatBotRuleGenerator.cs" />
     <Compile Include="ConsoleChatSession.cs" />
     <Compile Include="ChatSessionInterface.cs" />
     <Compile Include="LinkedList.cs" />

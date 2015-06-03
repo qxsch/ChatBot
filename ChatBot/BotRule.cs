@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace QXS.ChatBot
 {
@@ -107,6 +108,11 @@ namespace QXS.ChatBot
             return null;
         }
 
+        new public static BotRule CreateRuleFromXml(ChatBotRuleGenerator generator, XmlNode node)
+        {
+            Console.WriteLine("4");
+            return null;
+        }
     }
 
     public class ReplacementBotRule : BotRule
@@ -202,6 +208,24 @@ namespace QXS.ChatBot
                 }
             );
         }
+
+        new public static BotRule CreateRuleFromXml(ChatBotRuleGenerator generator, XmlNode node)
+        {
+            // get unique setters
+            Dictionary<string, string> setters = new Dictionary<string, string>();
+            foreach (XmlNode subnode in node.SelectNodes("Setters/Set").Cast<XmlNode>().Where(n => n.Attributes["Key"] != null))
+            {
+                setters[subnode.Attributes["Key"].Value] = subnode.InnerText;
+            }
+
+            return new ReplacementBotRule(
+                generator.GetRuleName(node),
+                generator.GetRuleWeight(node),
+                new Regex(generator.GetRulePattern(node)),
+                node.SelectNodes("Messages/Message").Cast<XmlNode>().Select(n => n.InnerText).ToArray(),
+                setters
+            );
+        }
     }
 
     public class RandomAnswersBotRule : BotRule
@@ -220,6 +244,16 @@ namespace QXS.ChatBot
         public string SendRandomMessage(Match match, ChatSessionInterface session)
         {
             return this._messages[rnd.Next(this._messages.Length)];
+        }
+
+        new public static BotRule CreateRuleFromXml(ChatBotRuleGenerator generator, XmlNode node)
+        {
+            return new RandomAnswersBotRule(
+                generator.GetRuleName(node),
+                generator.GetRuleWeight(node),
+                new Regex(generator.GetRulePattern(node)),
+                node.SelectNodes("Messages/Message").Cast<XmlNode>().Select(n => n.InnerText).ToArray()
+            );
         }
     }
 
@@ -267,6 +301,18 @@ namespace QXS.ChatBot
 
         protected Func<Match, ChatSessionInterface, string> _Process;
         public Func<Match, ChatSessionInterface, string> Process { get { return _Process; } }
+
+        public static BotRule CreateRuleFromXml(ChatBotRuleGenerator generator, XmlNode node)
+        {
+            return new BotRule(
+                generator.GetRuleName(node), 
+                generator.GetRuleWeight(node), 
+                new Regex(generator.GetRulePattern(node)), 
+                delegate(Match match, ChatSessionInterface session) { 
+                    return "I have to think about that";  
+                } 
+           );
+        }
     }
 
 }
