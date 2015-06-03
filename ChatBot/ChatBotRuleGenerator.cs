@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -20,12 +21,7 @@ namespace QXS.ChatBot
             }
         }
 
-        public List<BotRule> Parse(string xml)
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xml);
-            return Parse(doc);
-        }
+
 
         public string GetRuleName(XmlNode node)
         {
@@ -90,87 +86,87 @@ namespace QXS.ChatBot
             return null;
         }
 
+
+        protected BotRule ProcessNode(XmlNode node)
+        {
+            if (node.Attributes["Type"] == null || node.Attributes["Name"] == null)
+            {
+                return null;
+            }
+
+            Type type = resolveBotRuleTypeByName(node.Attributes["Type"].Value);
+            if (type == null)
+            {
+                return null;
+            }
+
+
+            return CreateRuleFromXml(type, node);
+
+        }
+
+        public List<BotRule> Parse(string xml)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            return Parse(doc);
+        }
+
+        public List<BotRule> Parse(Stream inStream)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(inStream);
+            return Parse(doc);
+        }
+
+        public List<BotRule> Parse(TextReader reader)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(reader);
+            return Parse(doc);
+        }
+
+        public List<BotRule> Parse(XmlReader reader)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(reader);
+            return Parse(doc);
+        }
+
+
         public List<BotRule> Parse(XmlDocument document, XmlNode startNode=null)
         {
-            Type type;
+            
             List<BotRule> liste = new List<BotRule>();
             if (startNode == null)
             {
                 foreach (XmlNode node in document.SelectNodes("/ChatBot/Rules/Rule"))
                 {
-                    if (node.Attributes["Type"] == null || node.Attributes["Name"] == null)
-                    {
-                        continue;
-                    }
-
-
-                    type = resolveBotRuleTypeByName(node.Attributes["Type"].Value);
-                    if (type == null)
-                    {
-                        continue;
-                    }
-
-                    // node.OwnerDocument
-
-                    BotRule rule = CreateRuleFromXml(type, node);
-                    //BotRule rule = (BotRule)type.GetMethod("CreateRuleFromXml", new Type[] { typeof(XmlNode) }).Invoke(null, new object[] { node });
-                    //BotRule rule = (BotRule)type.GetMethod("CreateRuleFromXml", BindingFlags.Public | BindingFlags.Static).Invoke(null, new object[] { node });
-                    /*if (rule != null)
+                    BotRule rule = ProcessNode(node);
+                    if (rule != null)
                     {
                         liste.Add(rule);
-                    }*/
-
-                    Console.WriteLine("CLASS: " + type);
-                    Console.WriteLine("INHER: " + type.BaseType);
-                    Console.WriteLine("RULE " + rule);
-                    Console.WriteLine();
+                    }
                 }
             }
             else
             {
-
+                foreach (XmlNode node in startNode.SelectNodes("Rules/Rule"))
+                {
+                    BotRule rule = ProcessNode(node);
+                    if (rule != null)
+                    {
+                        liste.Add(rule);
+                    }
+                }
             }
 
             return liste;
         }
-        /*<ChatBot>
-	                        <Rules>
-		                        <Rule Type=""BotRule"" Name="""">
-			                        <Pattern><![CDATA[]]></Pattern>
-			                        <Weight></Weight>
-			                        <Process><![CDATA[
-			                        ]]></Process>
-		                        </Rule>
-		
-		                        <Rule Type=""RandomAnswersBotRule"" Name="""">
-			                        <Pattern><![CDATA[]]></Pattern>
-			                        <Weight></Weight>
-			                        <Messages>
-				                        <Message></Message>
-			                        </Messages>
-		                        </Rule>
-		
-		                        <Rule Type=""ReplacementBotRule"" Name="""">
-			                        <Pattern><![CDATA[]]></Pattern>
-			                        <Weight></Weight>
-			                        <Messages>
-				                        <Message></Message>
-			                        </Messages>
-			                        <Setters>
-				                        <Set key=""KEY"">Value</Set>
-			                        </Setters>
-		                        </Rule>
-		
-		                        <Rule Type=""ConditionalBotRule"" Name="""">
-			                        <Weight></Weight>
-			                        <Conditions>
-				                        <Condition Key=""KEY"" Operator=""Equal"">VALUE</Condition>
-			                        </Conditions>
-			                        <Rules>
-				                        <!-- ... -->
-			                        </Rules>
-		                        </Rule>
-	                        </Rules>
-                        </ChatBot> */
+
+
+
+
+
     }
 }

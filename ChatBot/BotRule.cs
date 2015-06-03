@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System.Collections;
 
 namespace QXS.ChatBot
 {
@@ -17,10 +18,10 @@ namespace QXS.ChatBot
             UnequalIgnoreCase,
         }
 
-        protected Tuple<string, Operator, string>[] _Conditions;
+        protected IEnumerable<Tuple<string, Operator, string>> _Conditions;
         protected SortedList<int, List<BotRule>> _BotRules = new SortedList<int, List<BotRule>>(new DescComparer<int>());
 
-        public ConditionBotRule(string Name, int Weight, Tuple<string, Operator, string>[] Conditions, IEnumerable<BotRule> Rules)
+        public ConditionBotRule(string Name, int Weight, IEnumerable<Tuple<string, Operator, string>> Conditions, IEnumerable<BotRule> Rules)
             : base(Name, Weight)
         {
             this._MessagePattern = new Regex("^.*$");
@@ -110,8 +111,39 @@ namespace QXS.ChatBot
 
         new public static BotRule CreateRuleFromXml(ChatBotRuleGenerator generator, XmlNode node)
         {
-            Console.WriteLine("4");
-            return null;
+            // get unique setters
+            List<Tuple<string, Operator, string>> conditions = new List<Tuple<string, Operator, string>>();
+            foreach (XmlNode subnode in node.SelectNodes("Conditions/Condition").Cast<XmlNode>().Where(n => n.Attributes["Key"] != null && n.Attributes["Operator"]!=null))
+            {
+                switch (subnode.Attributes["Operator"].Value.Trim().ToLower())
+                {
+                    case "equal":
+                    case "eq":
+                        conditions.Add(new Tuple<string,Operator,string>(subnode.Attributes["Key"].Value, Operator.Equal, subnode.InnerText));
+                        break;
+                    case "equalignorecase":
+                    case "ieq":
+                        conditions.Add(new Tuple<string, Operator, string>(subnode.Attributes["Key"].Value, Operator.EqualIgnoreCase, subnode.InnerText));
+                        break;
+                    case "unequal":
+                    case "ne":
+                        conditions.Add(new Tuple<string, Operator, string>(subnode.Attributes["Key"].Value, Operator.Unequal, subnode.InnerText));
+                        break;
+                    case "unequalignorecase":
+                    case "ine":
+                        conditions.Add(new Tuple<string, Operator, string>(subnode.Attributes["Key"].Value, Operator.UnequalIgnoreCase, subnode.InnerText));
+                        break;
+
+                }
+                
+            }
+
+            return new ConditionBotRule(
+                generator.GetRuleName(node),
+                generator.GetRuleWeight(node),
+                conditions,
+                generator.Parse(node.OwnerDocument, node)
+            );
         }
     }
 
