@@ -47,7 +47,7 @@ namespace QXS.ChatBot
                 generator.GetRuleName(node),
                 generator.GetRuleWeight(node),
                 new Regex(generator.GetRulePattern(node)),
-                node.SelectNodes("Script").Cast<XmlNode>().First().InnerText
+                node.SelectChatBotNodes("cb:Script").Cast<XmlNode>().First().InnerText
             );
         }
     }

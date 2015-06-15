@@ -107,7 +107,7 @@ namespace QXS.ChatBot
         {
             // get unique setters
             Dictionary<string, string> setters = new Dictionary<string, string>();
-            foreach (XmlNode subnode in node.SelectNodes("Setters/Set").Cast<XmlNode>().Where(n => n.Attributes["Key"] != null))
+            foreach (XmlNode subnode in node.SelectChatBotNodes("cb:Setters/cb:Set").Cast<XmlNode>().Where(n => n.Attributes["Key"] != null))
             {
                 setters[subnode.Attributes["Key"].Value] = subnode.InnerText;
             }
@@ -116,7 +116,7 @@ namespace QXS.ChatBot
                 generator.GetRuleName(node),
                 generator.GetRuleWeight(node),
                 new Regex(generator.GetRulePattern(node)),
-                node.SelectNodes("Messages/Message").Cast<XmlNode>().Select(n => n.InnerText).ToArray(),
+                node.SelectChatBotNodes("cb:Messages/cb:Message").Cast<XmlNode>().Select(n => n.InnerText).ToArray(),
                 setters
             );
         }

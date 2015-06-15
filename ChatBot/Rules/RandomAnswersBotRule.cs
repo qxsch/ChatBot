@@ -33,7 +33,7 @@ namespace QXS.ChatBot
                 generator.GetRuleName(node),
                 generator.GetRuleWeight(node),
                 new Regex(generator.GetRulePattern(node)),
-                node.SelectNodes("Messages/Message").Cast<XmlNode>().Select(n => n.InnerText).ToArray()
+                node.SelectChatBotNodes("cb:Messages/cb:Message").Cast<XmlNode>().Select(n => n.InnerText).ToArray()
             );
         }
     }

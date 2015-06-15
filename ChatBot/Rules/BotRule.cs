@@ -56,12 +56,14 @@ namespace QXS.ChatBot
 
         public static BotRule CreateRuleFromXml(ChatBotRuleGenerator generator, XmlNode node)
         {
+            BotRuleCodeCompiler brcc = new BotRuleCodeCompiler(node.SelectChatBotNodes("cb:Process").Cast<XmlNode>().First().InnerText);
+
             return new BotRule(
                 generator.GetRuleName(node), 
                 generator.GetRuleWeight(node), 
                 new Regex(generator.GetRulePattern(node)), 
-                delegate(Match match, ChatSessionInterface session) { 
-                    return "I have to think about that";  
+                delegate(Match match, ChatSessionInterface session) {
+                    return brcc.Execute(match, session);
                 } 
            );
         }

@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ChatBot xmlns="http://www.qxs.ch/ChatBotSchema.xsd">
+  <Rules>
+    <Rule Type="BotRule" Name="">
+      <Pattern><![CDATA[your name is .*]]></Pattern>
+      <Weight>2</Weight>
+      <Process><![CDATA[
+      // Match match;
+      // ChatSessionInterface session
+      return "ok, this is my name";
+      ]]></Process>
+    </Rule>
+
+    <Rule Type="RandomAnswersBotRule" Name="">
+      <Pattern><![CDATA[hi]]></Pattern>
+      <Weight>3</Weight>
+      <Messages>
+        <Message>hi</Message>
+        <Message>ok</Message>
+      </Messages>
+    </Rule>
+
+    <Rule Type="PowershellBotRule" Name="pstest">
+      <Pattern><![CDATA[powershell]]></Pattern>
+      <Weight>10</Weight>
+      <Script>
+        <![CDATA[
+      ( ""Hi from PowerShell "" + $PSVersionTable.PSVersion )
+      ]]>
+      </Script>
+    </Rule>
+
+    <Rule Type="ReplacementBotRule" Name="">
+      <Pattern><![CDATA[]]></Pattern>
+      <Weight>4</Weight>
+      <Messages>
+        <Message></Message>
+      </Messages>
+      <Setters>
+        <Set Key="KEY">Value</Set>
+        <Set Key="KEY">Value</Set>
+      </Setters>
+    </Rule>
+
+    <Rule Type="ConditionBotRule" Name="">
+      <Weight>6</Weight>
+      <Conditions>
+        <Condition Key="KEY" Operator="Equal">VALUE</Condition>
+        <Condition Key="KEY" Operator="eq">VALUE</Condition>
+      </Conditions>
+      <Rules>
+        <!-- ... -->
+      </Rules>
+    </Rule>
+  </Rules>
+</ChatBot>

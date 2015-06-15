@@ -15,8 +15,8 @@ namespace QXS.ChatBot
         {
             Equal,
             EqualIgnoreCase,
-            Unequal,
-            UnequalIgnoreCase,
+            NotEqual,
+            NotEqualIgnoreCase,
         }
 
         protected IEnumerable<Tuple<string, Operator, string>> _Conditions;
@@ -69,7 +69,7 @@ namespace QXS.ChatBot
                             return null;
                         }
                         break;
-                    case Operator.Unequal:
+                    case Operator.NotEqual:
                         if (session.SessionStorage.Values[condition.Item1] == condition.Item3)
                         {
                             return null;
@@ -81,7 +81,7 @@ namespace QXS.ChatBot
                             return null;
                         }
                         break;
-                    case Operator.UnequalIgnoreCase:
+                    case Operator.NotEqualIgnoreCase:
                         if (session.SessionStorage.Values[condition.Item1].ToLower() == condition.Item3.ToLower())
                         {
                             return null;
@@ -114,7 +114,7 @@ namespace QXS.ChatBot
         {
             // get unique setters
             List<Tuple<string, Operator, string>> conditions = new List<Tuple<string, Operator, string>>();
-            foreach (XmlNode subnode in node.SelectNodes("Conditions/Condition").Cast<XmlNode>().Where(n => n.Attributes["Key"] != null && n.Attributes["Operator"] != null))
+            foreach (XmlNode subnode in node.SelectChatBotNodes("cb:Conditions/cb:Condition").Cast<XmlNode>().Where(n => n.Attributes["Key"] != null && n.Attributes["Operator"] != null))
             {
                 switch (subnode.Attributes["Operator"].Value.Trim().ToLower())
                 {
@@ -126,13 +126,13 @@ namespace QXS.ChatBot
                     case "ieq":
                         conditions.Add(new Tuple<string, Operator, string>(subnode.Attributes["Key"].Value, Operator.EqualIgnoreCase, subnode.InnerText));
                         break;
-                    case "unequal":
+                    case "notequal":
                     case "ne":
-                        conditions.Add(new Tuple<string, Operator, string>(subnode.Attributes["Key"].Value, Operator.Unequal, subnode.InnerText));
+                        conditions.Add(new Tuple<string, Operator, string>(subnode.Attributes["Key"].Value, Operator.NotEqual, subnode.InnerText));
                         break;
-                    case "unequalignorecase":
+                    case "notequalignorecase":
                     case "ine":
-                        conditions.Add(new Tuple<string, Operator, string>(subnode.Attributes["Key"].Value, Operator.UnequalIgnoreCase, subnode.InnerText));
+                        conditions.Add(new Tuple<string, Operator, string>(subnode.Attributes["Key"].Value, Operator.NotEqualIgnoreCase, subnode.InnerText));
                         break;
 
                 }

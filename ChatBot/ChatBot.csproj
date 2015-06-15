@@ -77,9 +77,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BotResponse.cs" />
+    <Compile Include="Generators\BotRuleCodeCompiler.cs" />
+    <Compile Include="MethodExtensions\ChatBotXmlNodeExtensions.cs" />
     <Compile Include="Rules\BotRule.cs" />
     <Compile Include="ChatBot.cs" />
-    <Compile Include="ChatBotRuleGenerator.cs" />
+    <Compile Include="Generators\ChatBotRuleGenerator.cs" />
     <Compile Include="ChatSessions\ConsoleChatSession.cs" />
     <Compile Include="ChatSessions\ChatSessionInterface.cs" />
     <Compile Include="LinkedList.cs" />
@@ -94,7 +96,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ChatBotXmlSchema.xsd">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

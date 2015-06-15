@@ -30,7 +30,7 @@ namespace QXS.ChatBot
 
         public string GetRulePattern(XmlNode node)
         {
-            foreach (XmlNode subnode in node.SelectNodes("Pattern"))
+            foreach (XmlNode subnode in node.SelectChatBotNodes("cb:Pattern"))
             {
                 return subnode.InnerText;
             }
@@ -40,7 +40,7 @@ namespace QXS.ChatBot
         public int GetRuleWeight(XmlNode node)
         {
             int weight = -100;
-            foreach (XmlNode subnode in node.SelectNodes("Weight"))
+            foreach (XmlNode subnode in node.SelectChatBotNodes("cb:Weight"))
             {
                 if (Int32.TryParse(subnode.InnerText.Trim(), out weight))
                 {
@@ -133,14 +133,13 @@ namespace QXS.ChatBot
             return Parse(doc);
         }
 
-
         public List<BotRule> Parse(XmlDocument document, XmlNode startNode=null)
         {
             
             List<BotRule> liste = new List<BotRule>();
             if (startNode == null)
             {
-                foreach (XmlNode node in document.SelectNodes("/ChatBot/Rules/Rule"))
+                foreach (XmlNode node in document.SelectChatBotNodes("/cb:ChatBot/cb:Rules/cb:Rule"))
                 {
                     BotRule rule = ProcessNode(node);
                     if (rule != null)
@@ -151,7 +150,7 @@ namespace QXS.ChatBot
             }
             else
             {
-                foreach (XmlNode node in startNode.SelectNodes("Rules/Rule"))
+                foreach (XmlNode node in startNode.SelectChatBotNodes("cb:Rules/cb:Rule"))
                 {
                     BotRule rule = ProcessNode(node);
                     if (rule != null)
@@ -163,10 +162,6 @@ namespace QXS.ChatBot
 
             return liste;
         }
-
-
-
-
 
     }
 }
