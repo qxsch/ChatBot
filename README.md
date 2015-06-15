@@ -2,6 +2,18 @@
 
 Extremely unstable POC ;-)
 
+Supported Conversation types:
+ * Console Conversations
+ * Lync Conversations
+ * Text-To-Speech & Speech-Recognition Conversations
+ * Any other Conversation, that implements the ChatSessionInterface
+
+Supports Bot-Definition from:
+ * XML
+ * C#/.NET/Powershell
+ * or any mixture of it
+
+
 Checkout the example
 
 ![Image of Yaktocat](https://raw.githubusercontent.com/qxsch/ChatBot/master/ChatBot.jpg)
