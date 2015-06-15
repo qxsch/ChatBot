@@ -5,63 +5,34 @@ using System.Text;
 using System.Threading.Tasks;
 using QXS.ChatBot;
 using System.Text.RegularExpressions;
+using System.IO;
+using System.Xml;
 
 namespace QXS.ChatBot.Examples
 {
     class Program
     {
-        static void Main(string[] args)
+        public static List<BotRule> createBotRulesFromXml(string xmlfile)
         {
-            /*string xml = @"<ChatBot>
-	                        <Rules>
-		                        <Rule Type=""BotRule"" Name="""">
-			                        <Pattern><![CDATA[]]></Pattern>
-			                        <Weight></Weight>
-			                        <Process><![CDATA[
-			                        ]]></Process>
-		                        </Rule>
-		
-		                        <Rule Type=""RandomAnswersBotRule"" Name="""">
-			                        <Pattern><![CDATA[]]></Pattern>
-			                        <Weight></Weight>
-			                        <Messages>
-				                        <Message></Message>
-			                        </Messages>
-		                        </Rule>
-		
-		                        <Rule Type=""ReplacementBotRule"" Name="""">
-			                        <Pattern><![CDATA[]]></Pattern>
-			                        <Weight></Weight>
-			                        <Messages>
-				                        <Message></Message>
-			                        </Messages>
-			                        <Setters>
-				                        <Set key=""KEY"">Value</Set>
-			                        </Setters>
-		                        </Rule>
-		
-		                        <Rule Type=""ConditionalBotRule"" Name="""">
-			                        <Weight></Weight>
-			                        <Conditions>
-				                        <Condition Key=""KEY"" Operator=""Equal"">VALUE</Condition>
-			                        </Conditions>
-			                        <Rules>
-				                        <!-- ... -->
-			                        </Rules>
-		                        </Rule>
-	                        </Rules>
-                        </ChatBot>";*/
-
-
-        List<BotRule> rules = new List<BotRule>()
+            List<BotRule> rules;
+            using (FileStream xml = new FileStream(xmlfile, FileMode.Open))
             {
-                new PowershellBotRule("pstest", 10, new Regex("powershell"), @" ( ""Hi from PowerShell "" + $PSVersionTable.PSVersion) "),
-                // debug rule
-                new BotRule(
+                rules = (new ChatBotRuleGenerator()).Parse(xml);
+            }
+
+            // append debug rule
+            rules.Add(generateVarDumpRule());
+
+            return rules;
+        }
+
+        public static BotRule generateVarDumpRule() {
+            return new BotRule(
                     Name: "var_dump",
-                    Weight: 200, 
+                    Weight: 200,
                     MessagePattern: new Regex("^var_?dump$", RegexOptions.IgnoreCase),
-                    Process: delegate(Match match, ChatSessionInterface session) {
+                    Process: delegate(Match match, ChatSessionInterface session)
+                    {
                         string answer = "Variables: \n";
                         foreach (string key in session.SessionStorage.Values.Keys)
                         {
@@ -69,7 +40,7 @@ namespace QXS.ChatBot.Examples
                         }
                         answer += "---\n";
                         answer += "History: \n";
-                        int i=0;
+                        int i = 0;
                         foreach (BotResponse response in session.GetResponseHistory())
                         {
                             answer += "  " + (++i) + ". " + response.RuleName + "\n";
@@ -78,8 +49,16 @@ namespace QXS.ChatBot.Examples
                         }
                         return answer;
                     }
-                ),
+                );
+        }
 
+        public static List<BotRule> createBotRulesFromCs()
+        {
+            return new List<BotRule>()
+            {
+                new PowershellBotRule("pstest", 10, new Regex("powershell"), @" ( ""Hi from PowerShell "" + $PSVersionTable.PSVersion) "),
+                // debug rule
+                generateVarDumpRule(),
                 // chatbot specific behaviour
                 new ConditionBotRule(
                     "conditionBot", 
@@ -190,9 +169,31 @@ namespace QXS.ChatBot.Examples
 
                 )
             };
+        }
 
+        static void Main(string[] args)
+        {
+            List<BotRule> rules;
+            string xmlfile;
+            Console.WriteLine("Press X for xml ruleset demo or C for C# ruleset");
+            switch (Console.ReadKey().Key)
+            {
+                case ConsoleKey.X:
+                    xmlfile = System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location))) + @"\ExampleRules.xml";
+                    rules = createBotRulesFromXml(xmlfile);
+                    break;
+                default:
+                    xmlfile = "C#";
+                    rules = createBotRulesFromCs();
+                    break;
+            }
 
-            Console.WriteLine("Press C for console demo,  S for speech demo   or   L for lync demo");
+            Console.WriteLine(Environment.NewLine + "Created ruleset from: " + xmlfile);
+
+            // Visualize the rules
+            (new ConsoleBotRuleVisualizer()).Visualize(rules);
+
+            Console.WriteLine(Environment.NewLine + "Press C for console demo,  S for speech demo   or   L for lync demo");
             switch (Console.ReadKey().Key)
             {
                 case ConsoleKey.C:
@@ -210,6 +211,9 @@ namespace QXS.ChatBot.Examples
                 case ConsoleKey.S:
                     Console.WriteLine(Environment.NewLine + "Speek Chat - Please use your mic and say something");
                     SpeechExample.SpeechChat(rules);
+                    break;
+                default:
+                    Console.WriteLine(Environment.NewLine + "Invalid selection! Bye...");
                     break;
             }
         }

@@ -86,6 +86,7 @@
     <Compile Include="ChatSessions\ChatSessionInterface.cs" />
     <Compile Include="LinkedList.cs" />
     <Compile Include="ChatSessions\LyncChatSession.cs" />
+    <Compile Include="Rules\BotRuleContainer.cs" />
     <Compile Include="Rules\ConditionBotRule.cs" />
     <Compile Include="Rules\PowershellBotRule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -93,6 +94,8 @@
     <Compile Include="Rules\ReplacementBotRule.cs" />
     <Compile Include="SessionStorage.cs" />
     <Compile Include="ChatSessions\SpeechConversation.cs" />
+    <Compile Include="Visualizers\BotRuleVisualizerInterface.cs" />
+    <Compile Include="Visualizers\ConsoleBotRuleVisualizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

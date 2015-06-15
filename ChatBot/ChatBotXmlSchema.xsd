@@ -57,6 +57,15 @@
 
       <xs:enumeration value="NotEqualIgnoreCase"/>
       <xs:enumeration value="ine"/>
+      
+      <xs:enumeration value="ContainsKey"/>
+      <xs:enumeration value="ck"/>
+      
+      <xs:enumeration value="ContainsValue"/>
+      <xs:enumeration value="cv"/>
+      
+      <xs:enumeration value="ContainsValueIgnoreCase" />
+      <xs:enumeration value="icv" />
     </xs:restriction>
   </xs:simpleType>
 

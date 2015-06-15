@@ -28,13 +28,17 @@ namespace QXS.ChatBot
 
             using(PowerShell ps = PowerShell.Create())
             {
-                ps.AddScript(this._Script);
+                // we múst import the parameters $session, $match
+                ps.AddScript("Param($match, $session)\n" + this._Script);
                 ps.AddParameter("match", match);
                 ps.AddParameter("session", session);
-                //Collection<PSObject> PSOutput = ps.Invoke();
                 foreach (PSObject outputItem in ps.Invoke())
                 {
                     output += outputItem.BaseObject.ToString() + "\n";
+                }
+                foreach (ErrorRecord e in ps.Streams.Error)
+                {
+                    Console.WriteLine(e.ToString());
                 }
             }
 

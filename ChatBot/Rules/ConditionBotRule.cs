@@ -9,7 +9,7 @@ using System.Collections;
 
 namespace QXS.ChatBot
 {
-    public class ConditionBotRule : BotRule
+    public class ConditionBotRule : BotRuleContainer
     {
         public enum Operator
         {
@@ -17,10 +17,13 @@ namespace QXS.ChatBot
             EqualIgnoreCase,
             NotEqual,
             NotEqualIgnoreCase,
+            ContainsKey,
+            ContainsValue,
+            ContainsValueIgnoreCase,
         }
 
         protected IEnumerable<Tuple<string, Operator, string>> _Conditions;
-        protected SortedList<int, List<BotRule>> _BotRules = new SortedList<int, List<BotRule>>(new DescComparer<int>());
+        //protected SortedList<int, List<BotRule>> _BotRules = new SortedList<int, List<BotRule>>(new DescComparer<int>());
 
         public ConditionBotRule(string Name, int Weight, IEnumerable<Tuple<string, Operator, string>> Conditions, IEnumerable<BotRule> Rules)
             : base(Name, Weight)
@@ -43,11 +46,11 @@ namespace QXS.ChatBot
                     throw new ArgumentException("Names are not unique. Duplicate key found for rule name \"" + rule.Name + "\".", "Rules");
                 }
                 ruleNames[rule.Name] = true;
-                if (!this._BotRules.ContainsKey(rule.Weight))
+                if (!this._NestedBotRules.ContainsKey(rule.Weight))
                 {
-                    this._BotRules[rule.Weight] = new List<BotRule>();
+                    this._NestedBotRules[rule.Weight] = new List<BotRule>();
                 }
-                this._BotRules[rule.Weight].Add(rule);
+                this._NestedBotRules[rule.Weight].Add(rule);
             }
 
             this._Process = this.ProcessSubrules;
@@ -87,10 +90,28 @@ namespace QXS.ChatBot
                             return null;
                         }
                         break;
+                    case Operator.ContainsKey:
+                        if (!session.SessionStorage.Values.ContainsKey(condition.Item1))
+                        {
+                            return null;
+                        }
+                        break;
+                    case Operator.ContainsValue:
+                        if (!session.SessionStorage.Values[condition.Item1].Contains(condition.Item3))
+                        {
+                            return null;
+                        }
+                        break;
+                    case Operator.ContainsValueIgnoreCase:
+                        if (!session.SessionStorage.Values[condition.Item1].ToLower().Contains(condition.Item3.ToLower()))
+                        {
+                            return null;
+                        }
+                        break;
                 }
             }
 
-            foreach (List<BotRule> rules in this._BotRules.Values)
+            foreach (List<BotRule> rules in this._NestedBotRules.Values)
             {
                 foreach (BotRule rule in rules)
                 {
@@ -133,6 +154,18 @@ namespace QXS.ChatBot
                     case "notequalignorecase":
                     case "ine":
                         conditions.Add(new Tuple<string, Operator, string>(subnode.Attributes["Key"].Value, Operator.NotEqualIgnoreCase, subnode.InnerText));
+                        break;
+                    case "containskey":
+                    case "ck":
+                        conditions.Add(new Tuple<string, Operator, string>(subnode.Attributes["Key"].Value, Operator.ContainsKey, subnode.InnerText));
+                        break;
+                    case "containsvalue":
+                    case "cv":
+                        conditions.Add(new Tuple<string, Operator, string>(subnode.Attributes["Key"].Value, Operator.ContainsValue, subnode.InnerText));
+                        break;
+                    case "containsvalueignorecase":
+                    case "icv":
+                        conditions.Add(new Tuple<string, Operator, string>(subnode.Attributes["Key"].Value, Operator.ContainsValueIgnoreCase, subnode.InnerText));
                         break;
 
                 }
