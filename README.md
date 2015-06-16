@@ -16,9 +16,155 @@ Supports Bot-Definition from:
 
 Checkout the example
 
-![Image of Yaktocat](https://raw.githubusercontent.com/qxsch/ChatBot/master/ChatBot.jpg)
+![Image of a chatbot conversation](https://raw.githubusercontent.com/qxsch/ChatBot/master/ChatBot.jpg)
 
+### XML Example
 
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<ChatBot xmlns="http://www.qxs.ch/ChatBotSchema.xsd">
+  <Rules>
+     <Rule Type="ReplacementBotRule" Name="repeat-last-sentence">
+      <Pattern><![CDATA[(please )?repeat the last sentence]]></Pattern>
+      <Weight>45</Weight>
+      <Messages>
+        <Message>i repeat your sentence: $s$sentence$</Message>
+        <Message>$s$BotName$ repeats your sentence: $s$sentence$</Message>
+      </Messages>
+    </Rule>
+      
+    <Rule Type="ReplacementBotRule" Name="repeat-sentence">
+      <Pattern><![CDATA[(please )?repeat(?<sentence> .*)]]></Pattern>
+      <Weight>40</Weight>
+      <Messages>
+        <Message>i repeat your sentence: $r$sentence$</Message>
+        <Message>$s$BotName$ repeats your sentence: $r$sentence$</Message>
+      </Messages>
+      <Setters>
+        <Set Key="sentence">$r$sentence$</Set>
+      </Setters>
+    </Rule>
+      
+    <Rule Type="BotRule" Name="b1">
+      <Pattern><![CDATA[please say (?<word>\S+)]]></Pattern>
+      <Weight>40</Weight>
+      <Process><![CDATA[
+      // Enter C# Code
+      // AVAILABLE VARIABLES:
+      //   System.Text.RegularExpressions.Match  match;
+      //   QXS.ChatBot.ChatSessionInterface      session;
+      return "ok, i say " + match.Groups["word"].Value;
+      ]]></Process>
+    </Rule>
+
+    <Rule Type="PowershellBotRule" Name="pstest">
+      <Pattern><![CDATA[powershell]]></Pattern>
+      <Weight>30</Weight>
+      <Script><![CDATA[
+        # Enter Powershell Code
+        # AVAILABLE VARIABLES:
+        #   System.Text.RegularExpressions.Match $match
+        #   QXS.ChatBot.ChatSessionInterface     $session
+        $name = "John Doe"
+        if ($session.SessionStorage.Values.ContainsKey("username")) {
+          $name = $session.SessionStorage.Values["username"]
+        }
+      ( "Hi $name from PowerShell " + $PSVersionTable.PSVersion )
+      ]]></Script>
+    </Rule>
+    
+    <Rule Type="RandomAnswersBotRule" Name="feeling">
+      <Pattern><![CDATA[how (are you|do you feel)]]></Pattern>
+      <Weight>20</Weight>
+      <Messages>
+        <Message>i feel ok</Message>
+        <Message>i am a bit bored</Message>
+      </Messages>
+    </Rule>
+
+    <Rule Type="ReplacementBotRule" Name="set-username">
+      <Pattern><![CDATA[(my name is|i am|i'm) (now )?(?<username>.*)]]></Pattern>
+      <Weight>20</Weight>
+      <Messages>
+        <Message>your name is now $r$username$</Message>
+        <Message>you are now $r$username$</Message>
+        <Message>pleased to meet you $r$username$</Message>
+      </Messages>
+      <Setters>
+        <Set Key="username">$r$username$</Set>
+      </Setters>
+    </Rule>
+    
+    <Rule Type="RandomAnswersBotRule" Name="get-username">
+      <Pattern><![CDATA[(what is|say) my name]]></Pattern>
+      <Weight>20</Weight>
+      <Messages>
+        <Message>i don't know your name</Message>
+        <Message>who are you?</Message>
+      </Messages>
+    </Rule>
+    
+    <Rule Type="ReplacementBotRule" Name="set-botname">
+      <Pattern><![CDATA[(your name is|you are) (now )?(?<botname>.*)]]></Pattern>
+      <Weight>20</Weight>
+      <Messages>
+        <Message>my name is now $r$botname$</Message>
+        <Message>i am now $r$botname$</Message>
+      </Messages>
+      <Setters>
+        <Set Key="botname">$r$botname$</Set>
+      </Setters>
+    </Rule>
+    
+    <Rule Type="RandomAnswersBotRule" Name="get-botname">
+      <Pattern><![CDATA[(who are you|(what is|say) your name)]]></Pattern>
+      <Weight>20</Weight>
+      <Messages>
+        <Message>i do not have a name</Message>
+      </Messages>
+    </Rule>
+
+    <!-- This condition fires in case a botname was set -->
+    <Rule Type="ConditionBotRule" Name="botname-condition">
+      <Weight>60</Weight>
+      <Conditions>
+        <Condition Key="botname" Operator="ContainsKey"></Condition>
+      </Conditions>
+      <Rules>
+        <Rule Type="ReplacementBotRule" Name="get-botname">
+          <Pattern><![CDATA[(who are you|(what is|say) your name)]]></Pattern>
+          <Weight>20</Weight>
+          <Messages>
+            <Message>My name is $s$botname$</Message>
+            <Message>I am $s$botname$</Message>
+          </Messages>
+        </Rule>
+      </Rules>
+    </Rule>
+  
+    <!-- This condition fires in case a username was set -->
+    <Rule Type="ConditionBotRule" Name="username-condition">
+      <Weight>60</Weight>
+      <Conditions>
+        <Condition Key="username" Operator="ContainsKey"></Condition>
+      </Conditions>
+      <Rules>
+        <Rule Type="ReplacementBotRule" Name="get-username">
+          <Pattern><![CDATA[(what is|say) my name]]></Pattern>
+          <Weight>20</Weight>
+          <Messages>
+            <Message>Your name is $s$username$</Message>
+            <Message>You are $s$username$</Message>
+          </Messages>
+        </Rule>
+      </Rules>
+    </Rule>
+
+  </Rules>
+</ChatBot>
+```
+
+### C# Example
 ```cs
 using System;
 using System.Collections.Generic;
