@@ -1,3 +1,6 @@
+
+cd $PSScriptRoot
+
 try
 {
     <#$refs = @( "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\Microsoft.CSharp.dll",
@@ -11,7 +14,7 @@ try
     "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Xml.Linq.dll" )
     Add-Type -Path "bin\ReleaseWithoutLync\ChatBot.dll" -ReferencedAssemblies $refs #>
 
-    Add-Type -Path "bin\ReleaseWithoutLync\ChatBot.dll"
+    Add-Type -Path ".\bin\ReleaseWithoutLync\ChatBot.dll"
 }
 catch
 {
@@ -35,5 +38,7 @@ $chatbot = New-Object QXS.ChatBot.ChatBot $ruleGenerator.Parse($xmlstring)
 
 # PARSE FROM FILE:
 $chatbot = New-Object QXS.ChatBot.ChatBot  $ruleGenerator.ParseFromFile($PSScriptRoot + "\ExampleRules.xml")
+
+# Run the ChatBot in a console chat session
 $consoleChatSession = New-Object QXS.ChatBot.ConsoleChatSession
 $chatbot.talkWith($consoleChatSession)
