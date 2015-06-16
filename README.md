@@ -22,6 +22,7 @@ Extremely unstable POC ;-)
    * XML
    * C#/.NET/Powershell
    * or any mixture of it
+ * Visualizers, that visualize your current ruleset
 
 
 Checkout the example
