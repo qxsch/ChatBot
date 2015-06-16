@@ -14,11 +14,7 @@ namespace QXS.ChatBot.Examples
     {
         public static List<BotRule> createBotRulesFromXml(string xmlfile)
         {
-            List<BotRule> rules;
-            using (FileStream xml = new FileStream(xmlfile, FileMode.Open))
-            {
-                rules = (new ChatBotRuleGenerator()).Parse(xml);
-            }
+            List<BotRule> rules = (new ChatBotRuleGenerator()).ParseFromFile(xmlfile);
 
             // append debug rule
             rules.Add(generateVarDumpRule());

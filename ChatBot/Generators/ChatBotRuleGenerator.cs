@@ -13,11 +13,17 @@ namespace QXS.ChatBot
     {
         public readonly string[] Prefixes;
 
-        public ChatBotRuleGenerator(string[] prefixes = null)
+        public ChatBotRuleGenerator()
+        {
+            Prefixes = new string[] { "", "QXS.ChatBot." };
+        }
+
+        public ChatBotRuleGenerator(string[] prefixes) 
+            : base()
         {
             if (prefixes == null)
             {
-                Prefixes=new string[] { "", "QXS.ChatBot." };
+                
             }
         }
 
@@ -103,6 +109,14 @@ namespace QXS.ChatBot
 
             return CreateRuleFromXml(type, node);
 
+        }
+
+        public List<BotRule> ParseFromFile(string filename)
+        {
+            using (FileStream xml = new FileStream(filename, FileMode.Open))
+            {
+                return Parse(xml);
+            }
         }
 
         public List<BotRule> Parse(string xml)
