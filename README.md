@@ -2,16 +2,26 @@
 
 Extremely unstable POC ;-)
 
-Supported Conversation types:
- * Console Conversations
- * Lync Conversations
- * Text-To-Speech & Speech-Recognition Conversations
- * Any other Conversation, that implements the ChatSessionInterface
-
-Supports Bot-Definition from:
- * XML
- * C#/.NET/Powershell
- * or any mixture of it
+ * Multiple BotRules are supported
+   * BotRule
+     `Runs a delegate / Extend this rule to create custom ones`
+   * ConditionBotRule
+     `Runs nested Rules, in case conditions are satisfied`
+   * PowershellBotRule
+     `Uses the pwoershell`
+   * RandomAnswersBotRule
+     `Generates a random answer`
+   * ReplacementBotRule
+     `Returns a answer, that contains words from the previous conversations, and can also be used to learn something`
+ * Supported Conversation types:
+   * Console Conversations
+   * Lync Conversations
+   * Text-To-Speech & Speech-Recognition Conversations
+   * Any other Conversation, that implements the ChatSessionInterface
+ * Supports Bot-Definition from:
+   * XML
+   * C#/.NET/Powershell
+   * or any mixture of it
 
 
 Checkout the example
