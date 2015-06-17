@@ -189,9 +189,13 @@ namespace QXS.ChatBot.Examples
             // Visualize the rules
             (new ConsoleBotRuleVisualizer()).Visualize(rules);
 
-            Console.WriteLine(Environment.NewLine + "Press C for console demo,  S for speech demo   or   L for lync demo");
+            Console.WriteLine(Environment.NewLine + "Press C for console demo,  S for speech demo   or   L for lync demo   or    X for consolespeech");
             switch (Console.ReadKey().Key)
             {
+                case ConsoleKey.X:
+                    Console.WriteLine(Environment.NewLine + "Console Chat - Please use your keyboard and write something");
+                    (new ChatBot(rules)).talkWith(new ConsoleSpeechChatSession()); ;
+                    break;
                 case ConsoleKey.C:
                     Console.WriteLine(Environment.NewLine + "Console Chat - Please use your keyboard and write something");
                     (new ChatBot(rules)).talkWith(new ConsoleChatSession());;
