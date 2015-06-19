@@ -7,7 +7,19 @@ using System.Threading.Tasks;
 
 namespace QXS.ChatBot
 {
+    public class LinkedListException : Exception
+    {
+        public LinkedListException(string message)
+            :base(message)
+        {
 
+        }
+        public LinkedListException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+
+        }
+    }
 
 
     internal class LinkedValue<T>
@@ -101,8 +113,28 @@ namespace QXS.ChatBot
         public int Count { get { return _elements; } }
         public bool IsReadOnly { get { return false; } }
 
-        public T First { get { return firstValue.current; } }
-        public T Last { get { return lastValue.current; } }
+        public T First 
+        { 
+            get
+            {
+                if (firstValue != null)
+                {
+                    return firstValue.current; 
+                }
+                return default(T);
+            } 
+        }
+        public T Last 
+        { 
+            get 
+            {
+                if (lastValue != null)
+                {
+                    return lastValue.current;
+                }
+                return default(T);
+            } 
+        }
 
         public IEnumerator<T> GetEnumerator()
         {
@@ -175,7 +207,7 @@ namespace QXS.ChatBot
             {
                 if (_throwWhenFull)
                 {
-                    throw new Exception("The linked list haas reached the limit of " + Size + " items.");
+                    throw new LinkedListException("The linked list has reached the limit of " + Size + " items.");
                 }
                 _elements = Size;
                 LinkedValue<T> value = firstValue;
@@ -203,7 +235,7 @@ namespace QXS.ChatBot
             {
                 if (_throwWhenFull)
                 {
-                    throw new Exception("The linked list haas reached the limit of " + Size + " items.");
+                    throw new LinkedListException("The linked list has reached the limit of " + Size + " items.");
                 }
                 _elements = Size;
                 LinkedValue<T> value = lastValue;
@@ -258,7 +290,7 @@ namespace QXS.ChatBot
         {
             if(lastValue==null)
             {
-                throw new Exception("The linked list is empty.");
+                throw new LinkedListException("The linked list is empty.");
             }
             _elements--;
 
@@ -282,7 +314,7 @@ namespace QXS.ChatBot
         {
             if(firstValue==null)
             {
-                throw new Exception("Whooot?");
+                throw new LinkedListException("The linked list is empty.");
             }
             _elements--;
 
