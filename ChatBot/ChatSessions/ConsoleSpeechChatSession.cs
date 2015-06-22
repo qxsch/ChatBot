@@ -12,6 +12,16 @@ namespace QXS.ChatBot
     {
         protected SpeechSynthesizer _speechSynthesizer;
 
+        /// <summary>
+        /// The session received a messsage
+        /// </summary>
+        public event Action<ChatSessionInterface, string> OnMessageReceived;
+
+        /// <summary>
+        /// The session replied to a message
+        /// </summary>
+        public event Action<ChatSessionInterface, string> OnMessageSent;
+
         public ConsoleSpeechChatSession()
         {
             SessionStorage = new SessionStorage();
@@ -35,7 +45,12 @@ namespace QXS.ChatBot
         public string readMessage()
         {
             Console.Write("YOU> ");
-            return Console.ReadLine();
+            string s = Console.ReadLine();
+            if (s != null && OnMessageReceived != null)
+            {
+                OnMessageReceived(this, s);
+            }
+            return s;
         }
         public void sendMessage(string message)
         {
@@ -44,6 +59,10 @@ namespace QXS.ChatBot
             Console.WriteLine(message.Replace("\n", "\n     "));
             Console.ResetColor();
             _speechSynthesizer.Speak(message);
+            if (message != null && OnMessageSent != null)
+            {
+                OnMessageSent(this, message);
+            }
         }
 
         public string askQuestion(string message)

@@ -15,6 +15,16 @@ namespace QXS.ChatBot
 
         protected Conversation _conversation;
 
+        /// <summary>
+        /// The session received a messsage
+        /// </summary>
+        public event Action<ChatSessionInterface, string> OnMessageReceived;
+
+        /// <summary>
+        /// The session replied to a message
+        /// </summary>
+        public event Action<ChatSessionInterface, string> OnMessageSent;
+
         public LyncConversation(Conversation Conversation)
         {
             _conversation = Conversation;
@@ -44,6 +54,11 @@ namespace QXS.ChatBot
                         textMessage
                         , SendMessageCallback
                         , textMessage);
+                }
+
+                if (message != null && OnMessageSent != null)
+                {
+                    OnMessageSent(this, message);
                 }
             }
             catch (Exception e)
@@ -79,6 +94,12 @@ namespace QXS.ChatBot
             }
             string s = _IncomingMessages.Dequeue().Trim();
             Console.WriteLine("READ #" + s + "#");
+
+            if (s != null && OnMessageReceived != null)
+            {
+                OnMessageReceived(this, s);
+            }
+
             return s;
         }
 

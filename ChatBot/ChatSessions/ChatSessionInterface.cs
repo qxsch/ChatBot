@@ -9,6 +9,16 @@ namespace QXS.ChatBot
 {
     public interface ChatSessionInterface
     {
+        /// <summary>
+        /// The session received a messsage
+        /// </summary>
+        event Action<ChatSessionInterface, string> OnMessageReceived;
+
+        /// <summary>
+        /// The session replied to a message
+        /// </summary>
+        event Action<ChatSessionInterface, string> OnMessageSent;
+
         string readMessage();
         void sendMessage(string message);
 

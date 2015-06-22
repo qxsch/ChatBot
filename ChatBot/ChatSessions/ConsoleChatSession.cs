@@ -9,6 +9,16 @@ namespace QXS.ChatBot
 {
     public class ConsoleChatSession : ChatSessionInterface
     {
+        /// <summary>
+        /// The session received a messsage
+        /// </summary>
+        public event Action<ChatSessionInterface, string> OnMessageReceived;
+
+        /// <summary>
+        /// The session replied to a message
+        /// </summary>
+        public event Action<ChatSessionInterface, string> OnMessageSent;
+
         public ConsoleChatSession()
         {
             SessionStorage = new SessionStorage();
@@ -17,7 +27,12 @@ namespace QXS.ChatBot
         public string readMessage()
         {
             Console.Write("YOU> ");
-            return Console.ReadLine();
+            string s = Console.ReadLine();
+            if (s != null && OnMessageReceived != null)
+            {
+                OnMessageReceived(this, s);
+            }
+            return s;
         }
         public void sendMessage(string message)
         {
@@ -25,6 +40,10 @@ namespace QXS.ChatBot
             Console.Write("BOT> ");
             Console.WriteLine(message.Replace("\n", "\n     "));
             Console.ResetColor();
+            if (message != null && OnMessageSent != null)
+            {
+                OnMessageSent(this, message);
+            }
         }
 
         public string askQuestion(string message)
