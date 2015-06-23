@@ -46,7 +46,7 @@
         if ($session.SessionStorage.Values.ContainsKey("username")) {
           $name = $session.SessionStorage.Values["username"]
         }
-      ( "Hi $name from PowerShell " + $PSVersionTable.PSVersion )
+        ( "Hi $name from PowerShell " + $PSVersionTable.PSVersion )
       ]]></Script>
     </Rule>
     
