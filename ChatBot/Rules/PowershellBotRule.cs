@@ -13,12 +13,18 @@ namespace QXS.ChatBot
     public class PowershellBotRule : BotRule
     {
         protected string _Script;
+        protected bool _showErrors = true;
 
         public PowershellBotRule(string Name, int Weight, Regex MessagePattern, string Script)
             : base(Name, Weight, MessagePattern)
         {
             this._Script = Script;
             this._Process = this.ProcessScript;
+        }
+        public PowershellBotRule(string Name, int Weight, Regex MessagePattern, string Script, bool showErrors)
+            : this(Name, Weight, MessagePattern, Script)
+        {
+            this._showErrors = showErrors;
         }
 
         
@@ -36,13 +42,22 @@ namespace QXS.ChatBot
                 {
                     output += outputItem.BaseObject.ToString() + "\n";
                 }
-                foreach (ErrorRecord e in ps.Streams.Error)
+                if (this._showErrors)
                 {
-                    Console.WriteLine(e.ToString());
+                    foreach (ErrorRecord e in ps.Streams.Error)
+                    {
+                        output += "ERROR: " + e.ToString() + "\n";
+                    }
                 }
             }
 
-            return output.Trim();
+            output = output.Trim();
+            if (output == "")
+            {
+                return null;
+            }
+
+            return output;
         }
 
         new public static BotRule CreateRuleFromXml(ChatBotRuleGenerator generator, XmlNode node)
