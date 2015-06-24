@@ -1,6 +1,6 @@
 # ChatBot
 
-Extremely unstable POC ;-)
+Just a Proof of Concept ;-)
 
  * Multiple BotRules are supported
    * BotRule
@@ -8,7 +8,7 @@ Extremely unstable POC ;-)
    * ConditionBotRule
      `Runs nested Rules, in case conditions are satisfied`
    * PowershellBotRule
-     `Uses the pwoershell`
+     `Uses the powershell`
    * RandomAnswersBotRule
      `Generates a random answer`
    * ReplacementBotRule
