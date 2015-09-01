@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>QXS.ChatBot</title>
+    <authors>QXSCH</authors>
+    <owners>QXSCH</owners>
+    <licenseUrl>https://github.com/qxsch/ChatBot/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/qxsch/ChatBot</projectUrl>
+    <!--<iconUrl>https://github.com/qxsch/ChatBot</iconUrl>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>QXSCH ChatBot</description>
+    <releaseNotes>Initial Release</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>Chat Lync</tags>
+  </metadata>
+</package>
