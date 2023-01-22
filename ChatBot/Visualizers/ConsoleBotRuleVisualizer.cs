@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QXS.ChatBot
 {
-    public class ConsoleBotRuleVisualizer : BotRuleVisualizerInterface
+    public class ConsoleBotRuleVisualizer : IBotRuleVisualizerInterface
     {
 
         public void Visualize(IEnumerable<BotRule> Rules)
@@ -24,10 +24,10 @@ namespace QXS.ChatBot
                 Console.WriteLine(prefix + "Weight: " + rule.Weight);
                 Console.WriteLine(prefix + "Regex:  " + rule.MessagePattern);
                 Console.WriteLine();
-                if (rule is BotRuleContainer)
+                if (rule is BotRuleContainer brc)
                 {
                     List<BotRule> NestedRules = new List<BotRule>();
-                    foreach(KeyValuePair<int,List<BotRule>> kv in ((BotRuleContainer)rule).NestedBotRules)
+                    foreach(KeyValuePair<int,List<BotRule>> kv in brc.NestedBotRules)
                     {
                         foreach (BotRule b in kv.Value)
                         {

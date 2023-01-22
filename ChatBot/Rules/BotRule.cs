@@ -15,7 +15,7 @@ namespace QXS.ChatBot
         {
             if (Name == null)
             {
-                throw new ArgumentException("Name is null.", "Name");
+                throw new ArgumentException("Name is null.", nameof(Name));
             }
 
             this._Name = Name;
@@ -27,17 +27,18 @@ namespace QXS.ChatBot
         {
             if (MessagePattern == null)
             {
-                throw new ArgumentException("MessagePattern is null.", "MessagePattern");
+                throw new ArgumentException("MessagePattern is null.", nameof(MessagePattern));
             }
             this._MessagePattern = MessagePattern;
         }
 
-        public BotRule(string Name, int Weight, Regex MessagePattern, Func<Match, ChatSessionInterface, string> Process)
+
+        public BotRule(string Name, int Weight, Regex MessagePattern, Func<Match, IChatSessionInterface, string> Process)
             : this(Name, Weight, MessagePattern)
         {
             if (Process == null)
             {
-                throw new ArgumentException("Process is null.", "Process");
+                throw new ArgumentException("Process is null.", nameof(Process));
             }
             this._Process = Process;
         }
@@ -51,8 +52,8 @@ namespace QXS.ChatBot
         protected Regex _MessagePattern;
         public Regex MessagePattern { get { return _MessagePattern; } }
 
-        protected Func<Match, ChatSessionInterface, string> _Process;
-        public Func<Match, ChatSessionInterface, string> Process { get { return _Process; } }
+        protected Func<Match, IChatSessionInterface, string> _Process;
+        public Func<Match, IChatSessionInterface, string> Process { get { return _Process; } }
 
         public static BotRule CreateRuleFromXml(ChatBotRuleGenerator generator, XmlNode node)
         {
@@ -62,7 +63,8 @@ namespace QXS.ChatBot
                 generator.GetRuleName(node), 
                 generator.GetRuleWeight(node), 
                 new Regex(generator.GetRulePattern(node)), 
-                delegate(Match match, ChatSessionInterface session) {
+                delegate(Match match, IChatSessionInterface session) {
+                    // Capture the BotRuleCodeCompiler in the lambda to execute the C# code
                     return brcc.Execute(match, session);
                 } 
            );

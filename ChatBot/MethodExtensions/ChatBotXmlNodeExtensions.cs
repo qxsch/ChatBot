@@ -37,6 +37,7 @@ namespace QXS.ChatBot
             ns.AddNamespace("cb", ChatBotNamespace);
             return node.SelectNodes(xpath, ns);
         }
+
         public static XmlNode SelectSingleChatBotNode(this XmlNode node, string xpath)
         {
             XmlNamespaceManager ns = new XmlNamespaceManager(node.GetXmlDocument().NameTable);

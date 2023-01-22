@@ -14,9 +14,9 @@ namespace QXS.ChatBot.Examples
 
         public static void SpeechChat(List<BotRule> rules)
         {
-
             using(SpeechRecognitionEngine speechRecognition = new SpeechRecognitionEngine(
                 new System.Globalization.CultureInfo("en-US")
+                //new System.Globalization.CultureInfo("fr-FR")
             ))
             { 
                 // Create a default dictation grammar.
@@ -47,7 +47,7 @@ namespace QXS.ChatBot.Examples
                 using (_SpeechConversation = new SpeechConversation(speechRecognition: speechRecognition))
                 {
                     ChatBot cb = new ChatBot(rules);
-                    cb.talkWith(_SpeechConversation);
+                    cb.TalkWith(_SpeechConversation);
                     Console.ReadKey();
                 }
             }

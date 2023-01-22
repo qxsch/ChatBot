@@ -8,7 +8,7 @@ using System.Speech.Synthesis;
 
 namespace QXS.ChatBot
 {
-    public class SpeechConversation : ChatSessionInterface, IDisposable
+    public class SpeechConversation : IChatSessionInterface, IDisposable
     {
         protected SpeechSynthesizer _speechSynthesizer;
         protected SpeechRecognitionEngine _speechRecognition;
@@ -16,12 +16,12 @@ namespace QXS.ChatBot
         /// <summary>
         /// The session received a messsage
         /// </summary>
-        public event Action<ChatSessionInterface, string> OnMessageReceived;
+        public event Action<IChatSessionInterface, string> OnMessageReceived;
 
         /// <summary>
         /// The session replied to a message
         /// </summary>
-        public event Action<ChatSessionInterface, string> OnMessageSent;
+        public event Action<IChatSessionInterface, string> OnMessageSent;
 
         public SpeechConversation(SpeechSynthesizer speechSynthesizer = null, SpeechRecognitionEngine speechRecognition = null)
         {
@@ -59,7 +59,7 @@ namespace QXS.ChatBot
             _speechRecognition.Dispose();
         }
 
-        public string readMessage()
+        public string ReadMessage()
         {
             RecognitionResult result = null;
             while( result == null)
@@ -73,7 +73,8 @@ namespace QXS.ChatBot
 
             return result.Text;
         }
-        public void sendMessage(string message)
+
+        public void SendMessage(string message)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("BOT> ");
@@ -86,11 +87,11 @@ namespace QXS.ChatBot
             }
         }
 
-        public string askQuestion(string message)
+        public string AskQuestion(string message)
         {
-            sendMessage(message);
+            SendMessage(message);
             Console.Write("YOU> ");
-            return readMessage();
+            return ReadMessage();
         }
 
         public bool IsInteractive { get { return true; } set { } }
@@ -102,7 +103,9 @@ namespace QXS.ChatBot
         {
             _ResponseHistory = new LinkedList<BotResponse>(_ResponseHistory, Size, false);
         }
+       
         protected LinkedList<BotResponse> _ResponseHistory = new LinkedList<BotResponse>(10, false);
+       
         public void AddResponseToHistory(BotResponse Response)
         {
             _ResponseHistory.Push(Response);

@@ -8,14 +8,6 @@ using System.Threading.Tasks;
 
 namespace QXS.ChatBot
 {
-    internal class DescComparer<T> : IComparer<T>
-    {
-        public int Compare(T x, T y)
-        {
-            return Comparer<T>.Default.Compare(y, x);
-        }
-    }
-
     /// <summary>
     /// The Chatbot
     /// </summary>
@@ -24,22 +16,22 @@ namespace QXS.ChatBot
         /// <summary>
         /// A conversation started
         /// </summary>
-        public event Action<ChatSessionInterface> OnConverationStarted;
+        public event Action<IChatSessionInterface> OnConverationStarted;
 
         /// <summary>
         /// A conversation ended
         /// </summary>
-        public event Action<ChatSessionInterface> OnConverationEnded;
+        public event Action<IChatSessionInterface> OnConverationEnded;
 
         /// <summary>
         /// The chatbot received a messsage
         /// </summary>
-        public event Action<ChatSessionInterface, string> OnMessageReceived;
+        public event Action<IChatSessionInterface, string> OnMessageReceived;
 
         /// <summary>
         /// The chatbot replied to a message
         /// </summary>
-        public event Action<ChatSessionInterface, string> OnMessageSent;
+        public event Action<IChatSessionInterface, string> OnMessageSent;
 
         /// <summary>
         /// Sets the Exit Condition for an ending conversation
@@ -60,30 +52,34 @@ namespace QXS.ChatBot
         /// <param name="Rules"></param>
         public ChatBot(IEnumerable<BotRule> Rules)
         {
-           Dictionary<string, bool> ruleNames = new Dictionary<string, bool>();
-           foreach(BotRule rule in Rules)
-           {
-               if (rule.Process == null)
-               {
-                   throw new ArgumentException("Process is null.", "Rules");
-               }
-               if (rule.MessagePattern == null)
-               {
-                   throw new ArgumentException("MessagePattern is null.", "Rules");
-               }
-               if (ruleNames.ContainsKey(rule.Name))
-               {
-                   throw new ArgumentException("Names are not unique. Duplicate key found for rule name \"" + rule.Name + "\".", "Rules");
-               }
-               ruleNames[rule.Name] = true;
-               if(!this._botRules.ContainsKey(rule.Weight))
-               {
-                   this._botRules[rule.Weight] = new List<BotRule>();
-               }
-               this._botRules[rule.Weight].Add(rule);
-           }
+            Dictionary<string, bool> ruleNames = new Dictionary<string, bool>();
 
-           ExitCondition = this.isGoodBye;
+            foreach (BotRule rule in Rules)
+            {
+                if (rule.Process == null)
+                {
+                    throw new ArgumentException("Process is null.", "Rules");
+                }
+                if (rule.MessagePattern == null)
+                {
+                    throw new ArgumentException("MessagePattern is null.", "Rules");
+                }
+                if (ruleNames.ContainsKey(rule.Name))
+                {
+                    throw new ArgumentException("Names are not unique. Duplicate key found for rule name \"" + rule.Name + "\".", "Rules");
+                }
+
+                ruleNames[rule.Name] = true;
+
+                // Add the rule to the _botRules with the same rule weight
+                if (!this._botRules.ContainsKey(rule.Weight))
+                {
+                    this._botRules[rule.Weight] = new List<BotRule>();
+                }
+                this._botRules[rule.Weight].Add(rule);
+            }
+
+            ExitCondition = this.IsGoodBye;
         }
 
         /// <summary>
@@ -92,7 +88,7 @@ namespace QXS.ChatBot
         /// <param name="session">The session, that should be used</param>
         /// <param name="messageIn">The message that came in</param>
         /// <returns>the response string or null in case no answer was found</returns>
-        protected string findAnswer(ChatSessionInterface session, string messageIn)
+        protected string FindAnswer(IChatSessionInterface session, string messageIn)
         {
             foreach (List<BotRule> rules in this._botRules.Values)
             {
@@ -114,9 +110,9 @@ namespace QXS.ChatBot
             return null;
         }
 
-        protected void sendResponse(ChatSessionInterface session, string messageOut)
+        protected void SendResponse(IChatSessionInterface session, string messageOut)
         {
-            session.sendMessage(messageOut);
+            session.SendMessage(messageOut);
             if (OnMessageSent != null)
             {
                 OnMessageSent(session, messageOut);
@@ -127,7 +123,7 @@ namespace QXS.ChatBot
         /// Starts a conversation over a session
         /// </summary>
         /// <param name="session"></param>
-        public void talkWith(ChatSessionInterface session)
+        public void TalkWith(IChatSessionInterface session)
         {
             if (session == null)
             {
@@ -142,14 +138,14 @@ namespace QXS.ChatBot
 
             string messageIn="";
             string messageOut="";
-            for (messageIn = session.readMessage(); !this.ExitCondition(messageIn); messageIn = session.readMessage())
+            for (messageIn = session.ReadMessage(); !this.ExitCondition(messageIn); messageIn = session.ReadMessage())
             {
                 if (OnMessageReceived != null)
                 {
                     OnMessageReceived(session, messageIn);
                 }
 
-                messageOut = findAnswer(session, messageIn);
+                messageOut = FindAnswer(session, messageIn);
                 if (messageOut == null)
                 {
                     // do we have a default answer?
@@ -160,17 +156,17 @@ namespace QXS.ChatBot
                     // still null?
                     if (messageOut == null)
                     {
-                        sendResponse(session, "What did you say?");
+                        SendResponse(session, "What did you say?");
                     }
                     else
                     {
-                        sendResponse(session, messageOut);
+                        SendResponse(session, messageOut);
                     }
                     
                 }
                 else
                 {
-                    sendResponse(session, messageOut);
+                    SendResponse(session, messageOut);
                 }
                 // still interactive?
                 if (!session.IsInteractive)
@@ -191,7 +187,7 @@ namespace QXS.ChatBot
         /// <seealso cref="ExitCondition"/>
         /// <param name="message">Message, that came in</param>
         /// <returns>Returns true, in case the conversation should be ended</returns>
-        public bool isGoodBye(string message)
+        public bool IsGoodBye(string message)
         {
             switch(message.ToLower())
             {

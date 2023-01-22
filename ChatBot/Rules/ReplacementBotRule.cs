@@ -41,7 +41,7 @@ namespace QXS.ChatBot
             this._Process = this.ReplaceMessage;
         }
 
-        public string ReplaceMessage(Match match, ChatSessionInterface session)
+        public string ReplaceMessage(Match match, IChatSessionInterface session)
         {
             // set the setters
             foreach (string key in this._setters.Keys)

@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 
 namespace QXS.ChatBot
 {
+    /// <summary>
+    /// Uses CSharpCodeProvider to compile the C# code into a dll in memory 
+    /// and get the reference to a MethodInfo for later execution.
+    /// </summary>
     public class BotRuleCodeCompiler
     {
         public const string DefaultNamspace = "QXS.ChatBot.CompiledBotRuleCode";
@@ -110,7 +114,13 @@ namespace " + DefaultNamspace + @"
         }
 
 
-        public string Execute(Match match, ChatSessionInterface session)
+        /// <summary>
+        /// Execute the C# code that was compiled in a dll (in memory) and refered with the MethodInfo
+        /// </summary>
+        /// <param name="match"></param>
+        /// <param name="session"></param>
+        /// <returns></returns>
+        public string Execute(Match match, IChatSessionInterface session)
         {
             object result = method.Invoke(null, new object[] { match, session });
             if (result == null)

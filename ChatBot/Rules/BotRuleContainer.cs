@@ -19,7 +19,7 @@ namespace QXS.ChatBot
         {
         }
 
-        protected BotRuleContainer(string Name, int Weight, Regex MessagePattern, Func<Match, ChatSessionInterface, string> Process)
+        protected BotRuleContainer(string Name, int Weight, Regex MessagePattern, Func<Match, IChatSessionInterface, string> Process)
             : base(Name, Weight, MessagePattern, Process)
         {
 

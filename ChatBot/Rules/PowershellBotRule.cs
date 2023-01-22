@@ -10,32 +10,42 @@ using System.Xml;
 
 namespace QXS.ChatBot
 {
+    /// <summary>
+    /// Uses PowerShell to execute the powershell script
+    /// </summary>
     public class PowershellBotRule : BotRule
     {
-        protected string _Script;
+        protected string _script;
         protected bool _showErrors = true;
 
-        public PowershellBotRule(string Name, int Weight, Regex MessagePattern, string Script)
-            : base(Name, Weight, MessagePattern)
+        public PowershellBotRule(string name, int weight, Regex messagePattern, string script)
+            : base(name, weight, messagePattern)
         {
-            this._Script = Script;
+            this._script = script;
             this._Process = this.ProcessScript;
         }
-        public PowershellBotRule(string Name, int Weight, Regex MessagePattern, string Script, bool showErrors)
-            : this(Name, Weight, MessagePattern, Script)
+
+        public PowershellBotRule(string name, int weight, Regex messagePattern, string script, bool showErrors)
+            : this(name, weight, messagePattern, script)
         {
             this._showErrors = showErrors;
         }
 
-        
-        public string ProcessScript(Match match, ChatSessionInterface session)
+
+        /// <summary>
+        /// Process the powershell script
+        /// </summary>
+        /// <param name="match"></param>
+        /// <param name="session"></param>
+        /// <returns></returns>
+        public string ProcessScript(Match match, IChatSessionInterface session)
         {
             string output = "";
 
             using(PowerShell ps = PowerShell.Create())
             {
-                // we múst import the parameters $session, $match
-                ps.AddScript("Param($match, $session)\n" + this._Script);
+                // we must import the parameters $session, $match
+                ps.AddScript("Param($match, $session)\n" + this._script);
                 ps.AddParameter("match", match);
                 ps.AddParameter("session", session);
                 foreach (PSObject outputItem in ps.Invoke())

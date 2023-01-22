@@ -56,7 +56,7 @@ namespace QXS.ChatBot
             return weight;
         }
 
-        public Type resolveBotRuleTypeByName(string name)
+        public Type ResolveBotRuleTypeByName(string name)
         {
             // resolve type
             Type type = null;
@@ -77,6 +77,12 @@ namespace QXS.ChatBot
             return type;
         }
 
+        /// <summary>
+        /// Uses reflection to call the "CreateRuleFromXml" method present in the type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="node"></param>
+        /// <returns></returns>
         protected BotRule CreateRuleFromXml(Type type, XmlNode node)
         {
             MethodInfo method;
@@ -100,15 +106,13 @@ namespace QXS.ChatBot
                 return null;
             }
 
-            Type type = resolveBotRuleTypeByName(node.Attributes["Type"].Value);
+            Type type = ResolveBotRuleTypeByName(node.Attributes["Type"].Value);
             if (type == null)
             {
                 return null;
             }
 
-
             return CreateRuleFromXml(type, node);
-
         }
 
         public List<BotRule> ParseFromFile(string filename)

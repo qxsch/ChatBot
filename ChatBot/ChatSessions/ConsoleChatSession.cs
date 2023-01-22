@@ -7,24 +7,24 @@ using System.Threading.Tasks;
 
 namespace QXS.ChatBot
 {
-    public class ConsoleChatSession : ChatSessionInterface
+    public class ConsoleChatSession : IChatSessionInterface
     {
         /// <summary>
         /// The session received a messsage
         /// </summary>
-        public event Action<ChatSessionInterface, string> OnMessageReceived;
+        public event Action<IChatSessionInterface, string> OnMessageReceived;
 
         /// <summary>
         /// The session replied to a message
         /// </summary>
-        public event Action<ChatSessionInterface, string> OnMessageSent;
+        public event Action<IChatSessionInterface, string> OnMessageSent;
 
         public ConsoleChatSession()
         {
             SessionStorage = new SessionStorage();
         }
 
-        public string readMessage()
+        public string ReadMessage()
         {
             Console.Write("YOU> ");
             string s = Console.ReadLine();
@@ -34,7 +34,7 @@ namespace QXS.ChatBot
             }
             return s;
         }
-        public void sendMessage(string message)
+        public void SendMessage(string message)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("BOT> ");
@@ -46,11 +46,11 @@ namespace QXS.ChatBot
             }
         }
 
-        public string askQuestion(string message)
+        public string AskQuestion(string message)
         {
-            sendMessage(message);
+            SendMessage(message);
             Console.Write("YOU> ");
-            return readMessage();
+            return ReadMessage();
         }
 
         public bool IsInteractive { get { return true; } set { } }
