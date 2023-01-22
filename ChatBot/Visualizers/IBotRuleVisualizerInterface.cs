@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QXS.ChatBot
 {
-    public interface BotRuleVisualizerInterface
+    public interface IBotRuleVisualizerInterface
     {
         void Visualize(IEnumerable<BotRule> Rules);
     }

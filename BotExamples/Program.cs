@@ -12,22 +12,22 @@ namespace QXS.ChatBot.Examples
 {
     class Program
     {
-        public static List<BotRule> createBotRulesFromXml(string xmlfile)
+        public static List<BotRule> CreateBotRulesFromXml(string xmlfile)
         {
             List<BotRule> rules = (new ChatBotRuleGenerator()).ParseFromFile(xmlfile);
 
             // append debug rule
-            rules.Add(generateVarDumpRule());
+            rules.Add(GenerateVarDumpRule());
 
             return rules;
         }
 
-        public static BotRule generateVarDumpRule() {
+        public static BotRule GenerateVarDumpRule() {
             return new BotRule(
                     Name: "var_dump",
                     Weight: 200,
                     MessagePattern: new Regex("^var_?dump$", RegexOptions.IgnoreCase),
-                    Process: delegate(Match match, ChatSessionInterface session)
+                    Process: delegate(Match match, IChatSessionInterface session)
                     {
                         string answer = "Variables: \n";
                         foreach (string key in session.SessionStorage.Values.Keys)
@@ -48,13 +48,13 @@ namespace QXS.ChatBot.Examples
                 );
         }
 
-        public static List<BotRule> createBotRulesFromCs()
+        public static List<BotRule> CreateBotRulesFromCs()
         {
             return new List<BotRule>()
             {
                 new PowershellBotRule("pstest", 10, new Regex("powershell"), @" ( ""Hi from PowerShell "" + $PSVersionTable.PSVersion) "),
                 // debug rule
-                generateVarDumpRule(),
+                GenerateVarDumpRule(),
                 // chatbot specific behaviour
                 new ConditionBotRule(
                     "conditionBot", 
@@ -79,7 +79,7 @@ namespace QXS.ChatBot.Examples
                     Name: "setbotname",
                     Weight: 10, 
                     MessagePattern: new Regex("(your name is|you are) (now )?(.*)", RegexOptions.IgnoreCase),
-                    Process: delegate(Match match, ChatSessionInterface session) {
+                    Process: delegate(Match match, IChatSessionInterface session) {
                         session.SessionStorage.Values["BotName"] = match.Groups[3].Value;
                         return "My name is now " + session.SessionStorage.Values["BotName"];
                     }
@@ -89,7 +89,7 @@ namespace QXS.ChatBot.Examples
                     Name: "getbotname",
                     Weight: 10, 
                     MessagePattern: new Regex("(who are you|(what is|say) your name)", RegexOptions.IgnoreCase),
-                    Process: delegate(Match match, ChatSessionInterface session) {
+                    Process: delegate(Match match, IChatSessionInterface session) {
                         if (!session.SessionStorage.Values.ContainsKey("BotName"))
                         {
                             return "I do not have a name";
@@ -107,7 +107,7 @@ namespace QXS.ChatBot.Examples
                     Name: "setusername",
                     Weight: 10, 
                     MessagePattern: new Regex("my name is (now )?(.*)", RegexOptions.IgnoreCase),
-                    Process: delegate(Match match, ChatSessionInterface session) {
+                    Process: delegate(Match match, IChatSessionInterface session) {
                         session.SessionStorage.Values["UserName"] = match.Groups[2].Value;
                         return "Hi " + session.SessionStorage.Values["UserName"];
                     }
@@ -117,7 +117,7 @@ namespace QXS.ChatBot.Examples
                     Name: "getusername",
                     Weight: 20, 
                     MessagePattern: new Regex("(what is|say) my name", RegexOptions.IgnoreCase),
-                    Process: delegate(Match match, ChatSessionInterface session) {
+                    Process: delegate(Match match, IChatSessionInterface session) {
                         if (!session.SessionStorage.Values.ContainsKey("UserName"))
                         {
                             return "Sorry, but you have not told my your name";
@@ -131,7 +131,7 @@ namespace QXS.ChatBot.Examples
                     Name: "greet",
                     Weight: 2, 
                     MessagePattern: new Regex("(hi|hello)", RegexOptions.IgnoreCase),
-                    Process: delegate(Match match, ChatSessionInterface session) {
+                    Process: delegate(Match match, IChatSessionInterface session) {
                         string answer = "Hi";
 
                         if (session.SessionStorage.Values.ContainsKey("UserName"))
@@ -152,7 +152,7 @@ namespace QXS.ChatBot.Examples
                     Name: "default",
                     Weight: 1, 
                     MessagePattern: new Regex(".*", RegexOptions.IgnoreCase),
-                    Process: delegate(Match match, ChatSessionInterface session) {
+                    Process: delegate(Match match, IChatSessionInterface session) {
                         string answer = "well, i have to think about that";
 
                         if (session.SessionStorage.Values.ContainsKey("UserName"))
@@ -176,11 +176,11 @@ namespace QXS.ChatBot.Examples
             {
                 case ConsoleKey.X:
                     xmlfile = System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location))) + @"\ExampleRules.xml";
-                    rules = createBotRulesFromXml(xmlfile);
+                    rules = CreateBotRulesFromXml(xmlfile);
                     break;
                 default:
                     xmlfile = "C#";
-                    rules = createBotRulesFromCs();
+                    rules = CreateBotRulesFromCs();
                     break;
             }
 

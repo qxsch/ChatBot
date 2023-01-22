@@ -31,8 +31,14 @@ namespace QXS.ChatBot
             this._showErrors = showErrors;
         }
 
-        
-        public string ProcessScript(Match match, ChatSessionInterface session)
+
+        /// <summary>
+        /// Process the powershell script
+        /// </summary>
+        /// <param name="match"></param>
+        /// <param name="session"></param>
+        /// <returns></returns>
+        public string ProcessScript(Match match, IChatSessionInterface session)
         {
             string output = "";
 

@@ -10,7 +10,7 @@ using Microsoft.Lync.Model.Conversation;
 
 namespace QXS.ChatBot
 {
-    public class LyncConversation : ChatSessionInterface
+    public class LyncConversation : IChatSessionInterface
     {
 
         protected Conversation _conversation;
@@ -18,12 +18,12 @@ namespace QXS.ChatBot
         /// <summary>
         /// The session received a messsage
         /// </summary>
-        public event Action<ChatSessionInterface, string> OnMessageReceived;
+        public event Action<IChatSessionInterface, string> OnMessageReceived;
 
         /// <summary>
         /// The session replied to a message
         /// </summary>
-        public event Action<ChatSessionInterface, string> OnMessageSent;
+        public event Action<IChatSessionInterface, string> OnMessageSent;
 
         public LyncConversation(Conversation Conversation)
         {

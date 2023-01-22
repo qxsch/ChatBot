@@ -114,7 +114,13 @@ namespace " + DefaultNamspace + @"
         }
 
 
-        public string Execute(Match match, ChatSessionInterface session)
+        /// <summary>
+        /// Execute the C# code that was compiled in a dll (in memory) and refered with the MethodInfo
+        /// </summary>
+        /// <param name="match"></param>
+        /// <param name="session"></param>
+        /// <returns></returns>
+        public string Execute(Match match, IChatSessionInterface session)
         {
             object result = method.Invoke(null, new object[] { match, session });
             if (result == null)

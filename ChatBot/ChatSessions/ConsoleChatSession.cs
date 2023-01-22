@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace QXS.ChatBot
 {
-    public class ConsoleChatSession : ChatSessionInterface
+    public class ConsoleChatSession : IChatSessionInterface
     {
         /// <summary>
         /// The session received a messsage
         /// </summary>
-        public event Action<ChatSessionInterface, string> OnMessageReceived;
+        public event Action<IChatSessionInterface, string> OnMessageReceived;
 
         /// <summary>
         /// The session replied to a message
         /// </summary>
-        public event Action<ChatSessionInterface, string> OnMessageSent;
+        public event Action<IChatSessionInterface, string> OnMessageSent;
 
         public ConsoleChatSession()
         {

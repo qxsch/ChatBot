@@ -9,22 +9,31 @@ using System.Collections;
 
 namespace QXS.ChatBot
 {
+    /// <summary>
+    /// Bot rule which randomly returns one of the messages
+    /// </summary>
     public class RandomAnswersBotRule : BotRule
     {
-        protected Random rnd = new Random();
+        protected Random _rnd = new Random();
 
         protected string[] _messages;
 
-        public RandomAnswersBotRule(string Name, int Weight, Regex MessagePattern, string[] Messages)
-            : base(Name, Weight, MessagePattern)
+        public RandomAnswersBotRule(string name, int Weight, Regex messagePattern, string[] messages)
+            : base(name, Weight, messagePattern)
         {
-            this._messages = Messages;
+            this._messages = messages;
             this._Process = this.SendRandomMessage;
         }
 
-        public string SendRandomMessage(Match match, ChatSessionInterface session)
+        /// <summary>
+        /// Sends randomly one of the messages
+        /// </summary>
+        /// <param name="match"></param>
+        /// <param name="session"></param>
+        /// <returns></returns>
+        public string SendRandomMessage(Match match, IChatSessionInterface session)
         {
-            return this._messages[rnd.Next(this._messages.Length)];
+            return this._messages[_rnd.Next(this._messages.Length)];
         }
 
         new public static BotRule CreateRuleFromXml(ChatBotRuleGenerator generator, XmlNode node)

@@ -8,14 +8,6 @@ using System.Threading.Tasks;
 
 namespace QXS.ChatBot
 {
-    internal class DescComparer<T> : IComparer<T>
-    {
-        public int Compare(T x, T y)
-        {
-            return Comparer<T>.Default.Compare(y, x);
-        }
-    }
-
     /// <summary>
     /// The Chatbot
     /// </summary>
@@ -24,22 +16,22 @@ namespace QXS.ChatBot
         /// <summary>
         /// A conversation started
         /// </summary>
-        public event Action<ChatSessionInterface> OnConverationStarted;
+        public event Action<IChatSessionInterface> OnConverationStarted;
 
         /// <summary>
         /// A conversation ended
         /// </summary>
-        public event Action<ChatSessionInterface> OnConverationEnded;
+        public event Action<IChatSessionInterface> OnConverationEnded;
 
         /// <summary>
         /// The chatbot received a messsage
         /// </summary>
-        public event Action<ChatSessionInterface, string> OnMessageReceived;
+        public event Action<IChatSessionInterface, string> OnMessageReceived;
 
         /// <summary>
         /// The chatbot replied to a message
         /// </summary>
-        public event Action<ChatSessionInterface, string> OnMessageSent;
+        public event Action<IChatSessionInterface, string> OnMessageSent;
 
         /// <summary>
         /// Sets the Exit Condition for an ending conversation
@@ -96,7 +88,7 @@ namespace QXS.ChatBot
         /// <param name="session">The session, that should be used</param>
         /// <param name="messageIn">The message that came in</param>
         /// <returns>the response string or null in case no answer was found</returns>
-        protected string FindAnswer(ChatSessionInterface session, string messageIn)
+        protected string FindAnswer(IChatSessionInterface session, string messageIn)
         {
             foreach (List<BotRule> rules in this._botRules.Values)
             {
@@ -118,7 +110,7 @@ namespace QXS.ChatBot
             return null;
         }
 
-        protected void SendResponse(ChatSessionInterface session, string messageOut)
+        protected void SendResponse(IChatSessionInterface session, string messageOut)
         {
             session.SendMessage(messageOut);
             if (OnMessageSent != null)
@@ -131,7 +123,7 @@ namespace QXS.ChatBot
         /// Starts a conversation over a session
         /// </summary>
         /// <param name="session"></param>
-        public void TalkWith(ChatSessionInterface session)
+        public void TalkWith(IChatSessionInterface session)
         {
             if (session == null)
             {

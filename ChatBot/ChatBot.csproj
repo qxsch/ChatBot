@@ -93,13 +93,14 @@
     <Compile Include="BotResponse.cs" />
     <Compile Include="ChatSessions\ConsoleSpeechChatSession.cs" />
     <Compile Include="ChatSessions\TimeOutConsoleChatSession.cs" />
+    <Compile Include="DescComparer.cs" />
     <Compile Include="Generators\BotRuleCodeCompiler.cs" />
     <Compile Include="MethodExtensions\ChatBotXmlNodeExtensions.cs" />
     <Compile Include="Rules\BotRule.cs" />
     <Compile Include="ChatBot.cs" />
     <Compile Include="Generators\ChatBotRuleGenerator.cs" />
     <Compile Include="ChatSessions\ConsoleChatSession.cs" />
-    <Compile Include="ChatSessions\ChatSessionInterface.cs" />
+    <Compile Include="ChatSessions\IChatSessionInterface.cs" />
     <Compile Include="LinkedList.cs" />
     <Compile Include="ChatSessions\LyncChatSession.cs" />
     <Compile Include="Rules\BotRuleContainer.cs" />
@@ -110,7 +111,7 @@
     <Compile Include="Rules\ReplacementBotRule.cs" />
     <Compile Include="SessionStorage.cs" />
     <Compile Include="ChatSessions\SpeechConversation.cs" />
-    <Compile Include="Visualizers\BotRuleVisualizerInterface.cs" />
+    <Compile Include="Visualizers\IBotRuleVisualizerInterface.cs" />
     <Compile Include="Visualizers\ConsoleBotRuleVisualizer.cs" />
   </ItemGroup>
   <ItemGroup>

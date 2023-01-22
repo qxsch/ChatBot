@@ -56,7 +56,7 @@ namespace QXS.ChatBot
             this._Process = this.ProcessSubrules;
         }
 
-        public string ProcessSubrules(Match match, ChatSessionInterface session)
+        public string ProcessSubrules(Match match, IChatSessionInterface session)
         {
             foreach (Tuple<string, Operator, string> condition in this._Conditions)
             {

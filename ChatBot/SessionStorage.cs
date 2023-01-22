@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace QXS.ChatBot
 {
+    /// <summary>
+    /// Session Storage fr the chatbot
+    /// </summary>
     public class SessionStorage
     {
         public Dictionary<string, string> Values = new Dictionary<string, string>();
