@@ -71,6 +71,7 @@ namespace QXS.ChatBot.Examples
                         new RandomAnswersBotRule("getfeeling2", 40, new Regex("how (are you|do you feel)", RegexOptions.IgnoreCase), new string[] {"i feel super", "i feel perfect", "i feel happy"}),
                     }
                 ),
+
                 // repet the last known sentence
                 new ReplacementBotRule("repeatLast", 41, new Regex("(please )?repeat the last sentence", RegexOptions.IgnoreCase), new string[] { "i repeat your last sentence:$s$sentence$", "$s$BotName$ repeats your last sentence:$s$sentence$"}),
                 // repet a sentence
@@ -88,6 +89,7 @@ namespace QXS.ChatBot.Examples
                         return "My name is now " + session.SessionStorage.Values["BotName"];
                     }
                 ),
+
                 // show the bot's name
                 new BotRule(
                     Name: "getbotname",
@@ -116,6 +118,7 @@ namespace QXS.ChatBot.Examples
                         return "Hi " + session.SessionStorage.Values["UserName"];
                     }
                 ),
+
                 // show the user's name
                 new BotRule(
                     Name: "getusername",
@@ -149,9 +152,9 @@ namespace QXS.ChatBot.Examples
                         }
                         return answer;
                     }
-
                 ),
-                // greet
+
+                // default
                 new BotRule(
                     Name: "default",
                     Weight: 1, 
@@ -166,7 +169,6 @@ namespace QXS.ChatBot.Examples
   
                         return answer;
                     }
-
                 )
             };
         }
