@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 
 namespace QXS.ChatBot
 {
+    /// <summary>
+    /// Uses CSharpCodeProvider to compile the C# code into a dll in memory 
+    /// and get the reference to a MethodInfo for later execution.
+    /// </summary>
     public class BotRuleCodeCompiler
     {
         public const string DefaultNamspace = "QXS.ChatBot.CompiledBotRuleCode";

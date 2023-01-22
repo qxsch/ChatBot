@@ -194,11 +194,11 @@ namespace QXS.ChatBot.Examples
             {
                 case ConsoleKey.X:
                     Console.WriteLine(Environment.NewLine + "Console Chat - Please use your keyboard and write something");
-                    (new ChatBot(rules)).talkWith(new ConsoleSpeechChatSession()); ;
+                    (new ChatBot(rules)).TalkWith(new ConsoleSpeechChatSession()); ;
                     break;
                 case ConsoleKey.C:
                     Console.WriteLine(Environment.NewLine + "Console Chat - Please use your keyboard and write something");
-                    (new ChatBot(rules)).talkWith(new ConsoleChatSession());;
+                    (new ChatBot(rules)).TalkWith(new ConsoleChatSession());;
                     break;
                 case ConsoleKey.L:
                     #if WITHLYNC

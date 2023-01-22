@@ -43,7 +43,7 @@ namespace QXS.ChatBot.ChatSessions
 
         delegate string ReadLineDelegate();
 
-        public string readMessage()
+        public string ReadMessage()
         {
             Console.Write("YOU> ");
             string s = ReadLineWithTimeout(readTimeoutMS);
@@ -53,7 +53,7 @@ namespace QXS.ChatBot.ChatSessions
             }
             return s;
         }
-        public void sendMessage(string message)
+        public void SendMessage(string message)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("BOT> ");
@@ -65,11 +65,11 @@ namespace QXS.ChatBot.ChatSessions
             }
         }
 
-        public string askQuestion(string message)
+        public string AskQuestion(string message)
         {
-            sendMessage(message);
+            SendMessage(message);
             Console.Write("YOU> ");
-            return readMessage();
+            return ReadMessage();
         }
 
         public bool IsInteractive { get { return true; } set { } }
@@ -81,7 +81,9 @@ namespace QXS.ChatBot.ChatSessions
         {
             _ResponseHistory = new LinkedList<BotResponse>(_ResponseHistory, Size, false);
         }
+
         protected LinkedList<BotResponse> _ResponseHistory = new LinkedList<BotResponse>(10, false);
+        
         public void AddResponseToHistory(BotResponse Response)
         {
             _ResponseHistory.Push(Response);

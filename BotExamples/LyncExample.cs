@@ -32,7 +32,7 @@ namespace QXS.ChatBot.Examples
             }
 
             ChatBot cb = new ChatBot(rules);
-            cb.talkWith(_LyncConversation);
+            cb.TalkWith(_LyncConversation);
             Console.ReadKey();
         }
 

@@ -14,6 +14,7 @@ namespace QXS.ChatBot
             this.Question = Question;
             this.Answer = (Answer.Length <= _MaxAnswerSize ? Answer : Answer.Substring(0, _MaxAnswerSize - 3));
         }
+
         public readonly string RuleName;
         public readonly string Question;
         public readonly string Answer;

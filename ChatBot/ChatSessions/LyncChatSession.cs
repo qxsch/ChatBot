@@ -40,7 +40,7 @@ namespace QXS.ChatBot
             _IncomingMessages.Enqueue(e.Text);
         }
 
-        public void sendMessage(string message)
+        public void SendMessage(string message)
         {
             Console.WriteLine("WRITE #" + message + "#");
             _MessageSent = false;
@@ -86,7 +86,7 @@ namespace QXS.ChatBot
         }
 
 
-        public string readMessage()
+        public string ReadMessage()
         {
             while (_IncomingMessages.Count <= 0)
             {
@@ -103,11 +103,11 @@ namespace QXS.ChatBot
             return s;
         }
 
-        public string askQuestion(string message)
+        public string AskQuestion(string message)
         {
             _IncomingMessages.Clear();
-            sendMessage(message);
-            return readMessage();
+            SendMessage(message);
+            return ReadMessage();
         }
 
         public bool IsInteractive { get { return true; } set { } }

@@ -19,10 +19,10 @@ namespace QXS.ChatBot
         /// </summary>
         event Action<ChatSessionInterface, string> OnMessageSent;
 
-        string readMessage();
-        void sendMessage(string message);
+        string ReadMessage();
+        void SendMessage(string message);
 
-        string askQuestion(string message);
+        string AskQuestion(string message);
 
         bool IsInteractive { get; set; }
 

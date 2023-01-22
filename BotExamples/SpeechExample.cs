@@ -47,7 +47,7 @@ namespace QXS.ChatBot.Examples
                 using (_SpeechConversation = new SpeechConversation(speechRecognition: speechRecognition))
                 {
                     ChatBot cb = new ChatBot(rules);
-                    cb.talkWith(_SpeechConversation);
+                    cb.TalkWith(_SpeechConversation);
                     Console.ReadKey();
                 }
             }

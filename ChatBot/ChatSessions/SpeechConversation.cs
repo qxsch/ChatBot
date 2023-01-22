@@ -59,7 +59,7 @@ namespace QXS.ChatBot
             _speechRecognition.Dispose();
         }
 
-        public string readMessage()
+        public string ReadMessage()
         {
             RecognitionResult result = null;
             while( result == null)
@@ -73,7 +73,7 @@ namespace QXS.ChatBot
 
             return result.Text;
         }
-        public void sendMessage(string message)
+        public void SendMessage(string message)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("BOT> ");
@@ -86,11 +86,11 @@ namespace QXS.ChatBot
             }
         }
 
-        public string askQuestion(string message)
+        public string AskQuestion(string message)
         {
-            sendMessage(message);
+            SendMessage(message);
             Console.Write("YOU> ");
-            return readMessage();
+            return ReadMessage();
         }
 
         public bool IsInteractive { get { return true; } set { } }

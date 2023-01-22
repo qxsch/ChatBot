@@ -10,6 +10,7 @@ namespace QXS.ChatBot
     {
         public Dictionary<string, string> Values = new Dictionary<string, string>();
         public Stack<string> Stack = new Stack<string>();
+        
         public void TrimStack(int elementsToKeep=5)
         {
             string[] newStack = Stack.ToArray();
