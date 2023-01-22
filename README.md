@@ -141,7 +141,7 @@ namespace QXS.ChatBot.Examples
                 }
             );
 
-            cb.talkWith(new ConsoleChatSession());
+            cb.TalkWith(new ConsoleChatSession());
         }
     }
 }
