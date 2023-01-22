@@ -22,6 +22,10 @@ namespace QXS.ChatBot.Examples
             return rules;
         }
 
+        /// <summary>
+        /// Generate a rule that will show the values in the chatboot SessionStorage and also display the chatboot messages history
+        /// </summary>
+        /// <returns></returns>
         public static BotRule GenerateVarDumpRule() {
             return new BotRule(
                     Name: "var_dump",
